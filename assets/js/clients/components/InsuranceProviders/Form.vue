@@ -69,7 +69,7 @@
                     			<b-form-group
 									label="Active"
 									label-for="active"
-									label-cols-lg="4" label-cols-xl="4"
+									label-cols-lg="2" label-cols-xl="2"
 									description="Inactive providers will not show up in dropdown lists."
 								>
 									<b-form-checkbox name="active" v-model="entity.active">Active</b-form-checkbox>
@@ -77,7 +77,7 @@
 
 					 <div class="d-flex align-items-start">
     <validation-provider vid="default_insurance_type_id" name="Type" :rules="{ required: true }" v-slot="validationContext">
-      <b-form-group label="Audit Type(s)" label-for="default_insurance_type_id" label-cols-lg="4" label-cols-xl="4">
+      <b-form-group label="Audit Type(s)" label-for="default_insurance_type_id" label-cols-lg="3" label-cols-xl="3">
         <b-form-checkbox-group
           name="insurance_type_ids"
           v-model="entity.insurance_type_ids"
@@ -106,7 +106,7 @@
       :disabled="saving"
     />
   </b-modal>
-					<b-form-group label="Decision Levels" label-for="entity.appeal_levels"  label-cols-lg="4" label-cols-xl="4">
+					<b-form-group label="Decision Levels" label-for="entity.appeal_levels"  label-cols-lg="2" label-cols-xl="2">
 						<div v-if="entity.appeal_levels.length > 0">
 							<div v-for="(appealLevel, index) in entity.appeal_levels" :key="index" class="mb-2">
 								<b-card no-body>
