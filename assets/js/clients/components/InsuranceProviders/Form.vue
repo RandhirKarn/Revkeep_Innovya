@@ -69,7 +69,7 @@
                     			<b-form-group
 									label="Active"
 									label-for="active"
-									label-cols-lg="2"
+									label-cols-lg="4" label-cols-xl="4"
 									description="Inactive providers will not show up in dropdown lists."
 								>
 									<b-form-checkbox name="active" v-model="entity.active">Active</b-form-checkbox>
@@ -77,7 +77,7 @@
 
 					 <div class="d-flex align-items-start">
     <validation-provider vid="default_insurance_type_id" name="Type" :rules="{ required: true }" v-slot="validationContext">
-      <b-form-group label="Audit Type(s)" label-for="default_insurance_type_id" label-cols-lg="4" label-cols-xl="3">
+      <b-form-group label="Audit Type(s)" label-for="default_insurance_type_id" label-cols-lg="4" label-cols-xl="4">
         <b-form-checkbox-group
           name="insurance_type_ids"
           v-model="entity.insurance_type_ids"
@@ -106,7 +106,7 @@
       :disabled="saving"
     />
   </b-modal>
-					<b-form-group label="Decision Levels" label-for="entity.appeal_levels" label-cols-lg="4" label-cols-xl="3">
+					<b-form-group label="Decision Levels" label-for="entity.appeal_levels"  label-cols-lg="4" label-cols-xl="4">
 						<div v-if="entity.appeal_levels.length > 0">
 							<div v-for="(appealLevel, index) in entity.appeal_levels" :key="index" class="mb-2">
 								<b-card no-body>
@@ -276,7 +276,7 @@
 															step="1"
 															min="0"
 															max="365"
-															default="30"
+															default="0"
 															v-model="appealLevel._joinData.Grace_days"
 															:disabled="saving"
 															:state="getValidationState(validationContext)"
@@ -620,7 +620,7 @@
 						</b-card-header> -->
 						<!-- <b-collapse id="collapseContact" role="tabpanel"> -->
 							<b-card-body>
-								<h5 class="h5 mb-4 text-uppercase font-weight-bold">Contact</h5>
+								<h5 class="h5 mb-4 text-uppercase font-weight-bold">Contact Information</h5>
 								<validation-provider
 									vid="phone"
 									name="Phone"
@@ -692,10 +692,10 @@
 								<validation-provider
 								vid="additionalContact"
 								name="Additional Contact Method"
-								:rules="{ required: true }" 
+								:rules="{ required: false }" 
 								v-slot="validationContext"
 							>
-								<b-form-group label="Additional Contact Method" label-for="additionalContact" label-cols-lg="4">
+								<b-form-group label="Website" label-for="additionalContact" label-cols-lg="4">
 									<b-form-input
 										name="additionalContact"
 										type="text"
@@ -773,7 +773,7 @@ export default {
 				],
 			},
 			addingAgency: false,
-            selectedState: null, // New property to store the selected state
+			selectedStateName: "Not Applicable",
 				usaStates: [
 				        { name: "Not Applicable" },
 						{ name: "Alabama" },
@@ -991,7 +991,7 @@ export default {
 					days_to_respond: 30,
 					max_days: 30,
 					agency_id: null,
-					Grace_days:30,
+					Grace_days:0,
 					level_type:null,
 					decision_options:null,
 				},
