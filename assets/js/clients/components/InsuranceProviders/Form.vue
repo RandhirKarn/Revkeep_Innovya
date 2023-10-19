@@ -991,7 +991,7 @@ export default {
 					days_to_respond: 30,
 					max_days: 30,
 					agency_id: null,
-					Grace_days:30,
+					Grace_days:0,
 					level_type:null,
 					decision_options:null,
 				},

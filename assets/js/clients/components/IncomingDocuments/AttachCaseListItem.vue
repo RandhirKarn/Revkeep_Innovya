@@ -197,7 +197,7 @@
 										<span v-if="appeal.appeal_type && appeal.appeal_type.name" class="text-muted">
 											{{ appeal.appeal_type.name }} 
 										</span>
-										<span v-else class="text-danger"> Missing Type </span>
+										<span v-else class="text-muted"> Post-Payment </span>
 										<appeal-status-label :value="appeal" />
 									</p>
 									<p v-if="appeal.appeal_status !== 'Closed'" class="mb-0">
