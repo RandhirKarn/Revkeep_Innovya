@@ -109,7 +109,7 @@
 									<validation-provider
 										vid="street_address_1"
 										name="Street Address"
-										:rules="{ required: false, max: 50 }"
+										:rules="{ required: false, max: 100 }"
 										v-slot="validationContext"
 									>
 										<b-form-input
@@ -127,10 +127,10 @@
 											v-text="error"
 										/>
 									</validation-provider>
-									<validation-provider
+									<!-- <validation-provider
 										vid="street_address_2"
 										name="Street Address (Continued)"
-										:rules="{ required: false, max: 50 }"
+										:rules="{ required: false, max: 100 }"
 										v-slot="validationContext"
 									>
 										<b-form-input
@@ -147,7 +147,7 @@
 											:key="error"
 											v-text="error"
 										/>
-									</validation-provider>
+									</validation-provider> -->
 								</b-form-group>
 
 								<validation-provider
@@ -417,13 +417,7 @@
 								:state="getValidationState(validationContext)"
 								:disabled="saving"
 								>
-								<!-- Add the new radio button for ESMD within the radio group -->
-								<b-form-radio
-									:value="'esmd'"
-									:disabled="saving"
-								>
-									ESMD
-								</b-form-radio>
+								
     						</b-form-radio-group>
 							
 							
@@ -550,12 +544,8 @@
 								</validation-provider>
 							</b-tab>
 
-							<b-tab title="ESMD" id="outgoing_WEBSITE" title-link-class="pr-lg-5">
-								<!-- <b-alert show variant="light">
-									<font-awesome-icon icon="info-circle" fixed-width />
-									Website-uploaded documents must be manually uploaded by the user processing them.
-									{{ appName }} cannot directly upload to third party websites.
-								</b-alert> -->
+							<!-- <b-tab title="ESMD" id="outgoing_WEBSITE" title-link-class="pr-lg-5">
+								
 
 								<validation-provider
 									vid="outgoing_profile.electronic_website"
@@ -600,24 +590,9 @@
 											style="max-width: 32rem"
 										/>
 									</b-form-group>
-									<b-form-group
-										label="Upload ESMD ID"
-										label-for="outgoing_profile.electronic_website"
-										label-cols-lg="4"
-										label-cols-xl="2"
-										description=""
-									>
-									<b-form-input
-											name="outgoing_profile.electronic_website"
-											type="text"
-											v-model="entity.outgoing_profile.electronic_website"
-											:state="getValidationState(validationContext)"
-											:disabled="saving"
-											style="max-width: 32rem"
-										/>
-									</b-form-group>
+									
 								</validation-provider>
-							</b-tab>
+							</b-tab> -->
 
 
 							<b-tab title="Mail" id="outgoing_MAIL" title-link-class="pr-lg-5">
