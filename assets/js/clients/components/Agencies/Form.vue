@@ -84,9 +84,9 @@
 					</validation-provider>
 				</b-card-body>
 				<b-card-body class="mb-4">
-					<h6 class="text-muted">Additional Details</h6>
-					<b-card no-body>
-						<b-card-header header-tag="header" role="tab" class="p-0">
+					<!-- <h6 class="text-muted">Additional Details</h6> -->
+					<!-- <b-card no-body> -->
+						<!-- <b-card-header header-tag="header" role="tab" class="p-0">
 							<b-button
 								block
 								v-b-toggle.collapseAddress
@@ -95,9 +95,11 @@
 								class="text-left px-4 py-3 m-0"
 								>Address</b-button
 							>
-						</b-card-header>
-						<b-collapse id="collapseAddress" role="tabpanel">
+						</b-card-header> -->
+						<!-- <b-collapse id="collapseAddress" role="tabpanel"> -->
+						<b-card>
 							<b-card-body>
+								<h5 class="h5 mb-4 text-uppercase font-weight-bold">Address</h5>
 								<b-form-group
 									label="Address"
 									label-for="street_address_1"
@@ -220,9 +222,10 @@
 									</b-form-group>
 								</validation-provider>
 							</b-card-body>
-						</b-collapse>
+						</b-card>
+						<!-- </b-collapse> -->
 
-						<b-card-header header-tag="header" role="tab" class="p-0">
+						<!-- <b-card-header header-tag="header" role="tab" class="p-0">
 							<b-button
 								block
 								v-b-toggle.collapseContact
@@ -231,9 +234,11 @@
 								class="text-left px-4 py-3 m-0"
 								>Contact Person</b-button
 							>
-						</b-card-header>
-						<b-collapse id="collapseContact" role="tabpanel">
+						</b-card-header> -->
+						<!-- <b-collapse id="collapseContact" role="tabpanel"> -->
+						<b-card>
 							<b-card-body>
+								<h5 class="h5 mb-4 text-uppercase font-weight-bold">Contact Person</h5>
 								<validation-provider
 									vid="contact_name"
 									name="Name"
@@ -371,9 +376,10 @@
 									</b-form-group>
 								</validation-provider>
 							</b-card-body>
-						</b-collapse>
-					</b-card>
-				</b-card-body>
+							<!-- </b-collapse> -->
+						</b-card>
+					</b-card-body>
+						
 
 				<b-card-body>
 					<h6 class="text-muted">Outgoing Documents</h6>

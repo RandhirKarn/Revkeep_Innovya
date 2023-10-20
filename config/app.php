@@ -407,7 +407,7 @@ return [
 			// 'port' => env('DATABASE_PORT', 8765),
 			'username' => env('DATABASE_USER', 'sa'),
 			'password' => env('DATABASE_PASS', 'sa'),
-			'database' => env('DATABASE_NAME', 'revkeep_3'),
+			'database' => env('DATABASE_NAME', 'revkeep_1'),
 
 			/*
 			 * SQL Server Configuration
