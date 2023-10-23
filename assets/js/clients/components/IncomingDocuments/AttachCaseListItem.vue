@@ -423,7 +423,7 @@ export default {
 			selectedOptionL5: null,
 			selectedOptionL6: null,
 			selectedOptionL7: null,
-			responseReceived:true,
+			responseReceived:false,
 			appealLevelNames:[],
 			appealLevelNamesObj:[],
 		};

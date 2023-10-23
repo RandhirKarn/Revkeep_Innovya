@@ -5,13 +5,13 @@
 				<slot name="header"></slot>
 
 				<b-card-body class="mb-0">
-					<validation-provider
+					<!-- <validation-provider
 						vid="appeal_type_id"
 						name="Appeal Type"
 						:rules="{ required: true }"
 						v-slot="validationContext"
 					>
-						<!-- <b-form-group label="Type" label-for="appeal_type_id" label-cols-lg="4">
+						 <b-form-group label="Type" label-for="appeal_type_id" label-cols-lg="4">
 							<b-form-radio-group
 								v-model="entity.appeal_type_id"
 								:options="appealTypes"
@@ -27,8 +27,8 @@
 								:key="error"
 								v-text="error"
 							/>
-						</b-form-group> -->
-					</validation-provider>
+						</b-form-group> 
+					</validation-provider> -->
 
 					<validation-provider
 						vid="appeal_level_id"
@@ -65,7 +65,7 @@
 						<b-form-group label="Letter Date" label-for="letter_date" label-cols-lg="4">
 							<b-form-input
 								type="date"
-								v-model="letterDate"
+								v-model="entity.letter_date"
 								name="letter_date"
 								required="required"
 								:disabled="saving"
@@ -105,7 +105,6 @@
 							/>
 						</b-form-group>
 					</validation-provider>
-
 					<validation-provider
 						vid="days_to_respond"
 						name="Days to respond"
@@ -119,8 +118,8 @@
 								step="1"
 								min="0"
 								max="365"
-								default="daysToRespond"
-								v-model="daysToRespond"
+								default="daysToDecision"
+								v-model="daysToDecision"
 								:disabled="saving"
 								:state="getValidationState(validationContext)"
 								required="required"
@@ -132,7 +131,58 @@
 							/>
 						</b-form-group>
 					</validation-provider>
-
+                    <validation-provider
+						vid="days_to_respond"
+						name="Days to respond"
+						:rules="{ required: true, min: 0, max: 365 }"
+						v-slot="validationContext"
+					>
+						<b-form-group label="Days To Respond " label-for="days_to_respond" label-cols-lg="4">
+							<b-form-input
+							    name="days_to_respond"
+								type="number"
+								step="1"
+								min="0"
+								max="365"
+								default="daysToRespond"
+								v-model="selectedDaysToRespond"
+								:disabled="saving"
+								:state="getValidationState(validationContext)"
+								required="required"
+							/>
+							<b-form-invalid-feedback
+								v-for="error in validationContext.errors"
+								:key="error"
+								v-text="error"
+							/>
+						</b-form-group>
+					</validation-provider>
+					<validation-provider
+						vid="Grace Days"
+						name="Grace Days"
+						:rules="{ required: false, min: 0, max: 365 }"
+						v-slot="validationContext"
+					>
+					<b-form-group label="Grace Days" label-for="Grace Days" label-cols-lg="4">
+							<b-form-input
+							    name="Grace Days"
+								type="number"
+								step="1"
+								min="0"
+								max="365"
+								default="Grace Days"
+								v-model="GraceDays"
+								:disabled="saving"
+								:state="getValidationState(validationContext)"
+								required="required"
+							/>
+							<b-form-invalid-feedback
+								v-for="error in validationContext.errors"
+								:key="error"
+								v-text="error"
+							/>
+						</b-form-group>
+					</validation-provider>
 					<validation-provider
 						vid="days_to_respond_from"
 						name="Days to respond from"
@@ -168,7 +218,7 @@
 						<b-form-group label="Due Date" label-for="due_date" label-cols-lg="4">
 							<b-form-input
 								type="date"
-								v-model="due_date"
+								v-model="dueDate"
 								name="due_date"
 								required="required"
 								:readonly="false"
@@ -396,7 +446,7 @@
 						</div>
 					
 
-					<b-card-footer>
+					<!-- <b-card-footer>
 						<b-row>
 							<b-col cols="12" md="6" xl="4" class="mb-4 mb-md-0">
 								<b-button v-if="!disableCancel" block variant="light" @click="cancel">Cancel</b-button>
@@ -415,7 +465,7 @@
 								</b-button>
 							</b-col>
 						</b-row>
-					</b-card-footer>
+					</b-card-footer> -->
 
 					
 
@@ -749,12 +799,55 @@ export default {
 			due_date:null,
 			insurance:null,
 			agency_autofill:null,
-			daysToRespond:null,
+			daysToRespond:[],
 			insuranceData:[],
+			daysToRespond: null,
+			gracedays: null
+			// selectedDaysToRespond: []
 		};
 		
 	},
 	computed: {
+		dueDate() {
+    if (this.entity.days_to_respond_from_id == 1) {
+      // received date
+      return moment(this.entity.received_date).add(this.daysToRespond, 'days').add(this.gracedays, 'days').format('YYYY-MM-DD')
+
+    } else if (this.entity.days_to_respond_from_id == 2) {
+      // letter date
+      return moment(this.entity.letter_date).add(this.daysToRespond, 'days').add(this.gracedays, 'days').format('YYYY-MM-DD')
+    }
+  },
+
+		selectedDaysToRespond() {
+    if (!this.entity.appeal_level_id) return null;
+    
+    const selectedLevel = this.insuranceData.find(level => {
+      return level.id === this.entity.appeal_level_id;
+    });
+	console.log("radio", this.daysToRespondFroms);
+	console.log('days to respond:', selectedLevel.days_to_respond);
+    console.log('Selected level:', selectedLevel);
+	this.daysToRespond = selectedLevel.days_to_respond;
+	console.log("final",this.daysToRespond);
+	return(this.daysToRespond);
+    // return selectedLevel ? selectedLevel.daysToRespond : null;
+	
+  },
+ 	 GraceDays() {
+    if (!this.entity.appeal_level_id) return null;
+    
+    const selectedLevel = this.insuranceData.find(level => {
+      return level.id === this.entity.appeal_level_id;
+    });
+	console.log('days to respond:', selectedLevel.Grace_days);
+    console.log('Selected level:', selectedLevel);
+	this.gracedays = selectedLevel.Grace_days;
+	console.log("final",this.gracedays);
+	return(this.gracedays);
+    
+	
+  },
 		availableAppealLevels() {
 			if (
 				!this.caseEntity ||
@@ -770,33 +863,33 @@ export default {
 
 			return this.appealLevels;
 		},
-		dueDate() {
-			if (this.entity.days_to_respond && this.entity.days_to_respond_from_id) {
-				if (this.entity.days_to_respond_from_id == 1) {
-					// received date
-					if (this.entity.received_date) {
-						return moment(this.entity.received_date)
-							.add(this.entity.days_to_respond, "days")
-							.format("YYYY-MM-DD");
-					} else {
-						return null;
-					}
-				} else if (this.entity.days_to_respond_from_id == 2) {
-					// letter date
-					if (this.entity.letter_date) {
-						return moment(this.entity.letter_date)
-							.add(this.entity.days_to_respond, "days")
-							.format("YYYY-MM-DD");
-					} else {
-						return null;
-					}
-				} else {
-					console.error("Invalid days_to_respond_from_id " + this.entity.days_to_respond_from_id);
-					return null;
-				}
-			}
-			return null;
-		},
+		// dueDate() {
+		// 	if (this.entity.days_to_respond && this.entity.days_to_respond_from_id) {
+		// 		if (this.entity.days_to_respond_from_id == 1) {
+		// 			// received date
+		// 			if (this.entity.received_date) {
+		// 				return moment(this.entity.received_date)
+		// 					.add(this.entity.days_to_respond, "days")
+		// 					.format("YYYY-MM-DD");
+		// 			} else {
+		// 				return null;
+		// 			}
+		// 		} else if (this.entity.days_to_respond_from_id == 2) {
+		// 			// letter date
+		// 			if (this.entity.letter_date) {
+		// 				return moment(this.entity.letter_date)
+		// 					.add(this.entity.days_to_respond, "days")
+		// 					.format("YYYY-MM-DD");
+		// 			} else {
+		// 				return null;
+		// 			}
+		// 		} else {
+		// 			console.error("Invalid days_to_respond_from_id " + this.entity.days_to_respond_from_id);
+		// 			return null;
+		// 		}
+		// 	}
+		// 	return null;
+		// },
 		canAddReferenceNumber() {
 			if (!this.entity.appeal_reference_numbers || !this.entity.appeal_reference_numbers.length) {
 				return true;
@@ -827,7 +920,7 @@ export default {
 	mounted() {
 
 		this.test();
-
+		console.log('Days to respond input value on mount:', this.selectedDaysToRespond);
 		
 		// Default appeal type
 		if (this.entity.appeal_type_id === null && this.appealTypes.length) {
@@ -864,6 +957,14 @@ export default {
 		}
 	},
 	methods: {
+		updateAppealLevel() {
+    // update appeal level
+    
+    console.log('Selected appeal level id:', this.entity.appeal_level_id);
+    
+    console.log('New selectedDaysToRespond:', this.selectedDaysToRespond);
+  },
+
 		getValidationState,
 		cancel() {
 			this.$emit("cancel");
@@ -958,45 +1059,45 @@ export default {
 			this.entity.insurance_provider_id = insuranceProvider.id;
 		},
 
-		formatDate(dateString) {
-			const date = new Date(dateString);
-			const year = date.getFullYear();
-			const month = String(date.getMonth() + 1).padStart(2, '0');
-			const day = String(date.getDate()).padStart(2, '0');
-			return `${year}-${month}-${day}`;
-		},
+		// formatDate(dateString) {
+		// 	const date = new Date(dateString);
+		// 	const year = date.getFullYear();
+		// 	const month = String(date.getMonth() + 1).padStart(2, '0');
+		// 	const day = String(date.getDate()).padStart(2, '0');
+		// 	return `${year}-${month}-${day}`;
+		// },
 
-		addDaysToDate(dateString, days)
-		 {
-			const date = new Date(dateString);
-			date.setDate(date.getDate() + days);
-			return date.toISOString().split('T')[0];
-		},
+		// addDaysToDate(dateString, days)
+		//  {
+		// 	const date = new Date(dateString);
+		// 	date.setDate(date.getDate() + days);
+		// 	return date.toISOString().split('T')[0];
+		// },
 
-		async autoFillForm() {
-			try{
-				const url = "http://localhost:8765/client/textract";
+		// async autoFillForm() {
+		// 	try{
+		// 		const url = "http://localhost:8765/client/textract";
 				
-				const responses = await axios.get(url, {
-				headers: {
-					"Accept": "application/json",
-					// You can add other headers here if needed
-				},
-				});
-				this.daysToRespond =  45;
-				this.letterDate = this.formatDate('09/08/2023');  
-				this.due_date = this.addDaysToDate(this.letterDate , this.daysToRespond);
-				// this.insurance = responses.data[0].insurance_provider; 
-				// this.insuranceProviders.unshift(this.insurance);
-				this.agency_autofill = 'Performant';
-				this.agencies.unshift(this.agency_autofill);
+		// 		const responses = await axios.get(url, {
+		// 		headers: {
+		// 			"Accept": "application/json",
+		// 			// You can add other headers here if needed
+		// 		},
+		// 		});
+		// 		this.daysToRespond =  45;
+		// 		this.letterDate = this.formatDate('09/08/2023');  
+		// 		this.due_date = this.addDaysToDate(this.letterDate , this.daysToRespond);
+		// 		// this.insurance = responses.data[0].insurance_provider; 
+		// 		// this.insuranceProviders.unshift(this.insurance);
+		// 		this.agency_autofill = 'Performant';
+		// 		this.agencies.unshift(this.agency_autofill);
 				
 				
-			} 
-			catch (error) {
-				console.error("Error:", error);
-			}
-    	},
+		// 	} 
+		// 	catch (error) {
+		// 		console.error("Error:", error);
+		// 	}
+    	// },
 
 		async buttonPressed() {
 				console.log('Save button pressed');
@@ -1026,11 +1127,20 @@ export default {
 				if(item.insurance_provider_id==this.caseEntity.insurance_provider_id){
 					console.log("match found = ", item);
 					let ids = parseInt(item.id, 10);
-					this.insuranceData.push({label:item.label, id:ids , count:count});
+					this.insuranceData.push({label:item.label, id:ids , count:count , days_to_respond: item.days_to_respond, Grace_days: item.Grace_days});
 					count ++;
 				}
 				});
 				this.insuranceData.sort((a,b)=> a.id - b.id);
+                response.data.forEach((item, index) => {
+				console.log(`Element at index ${index}:`, item);
+				if(item.insurance_provider_id==this.caseEntity.insurance_provider_id){
+					console.log("match found");
+					this.daysToRespond.push({daysToRespond:item.days_to_respond, id:item.id});
+					count ++;
+				}
+				});
+                console.log("daysTorespond = " , this.daysToRespond);
 				console.log("response updated = " , this.insuranceData);
 				console.log("case entity =", this.caseEntity);
 				console.log("appeal =", this.entity.appeal_level_id);
@@ -1040,7 +1150,6 @@ export default {
 			}
 
 		},
-
 		updateAppealLevelCount(){
 			const selectedOption = this.insuranceData.find(option => option.id === this.entity.appeal_level_id);
 			if (selectedOption) {
@@ -1052,12 +1161,12 @@ export default {
 		}
 
 	},
-	watch: {
-		dueDate: function (newVal) {
-			if (newVal) {
-				this.entity.due_date = newVal;
-			}
-		},
-	},
+	// watch: {
+	// 	dueDate: function (newVal) {
+	// 		if (newVal) {
+	// 			this.entity.due_date = newVal;
+	// 		}
+	// 	},
+	// },
 };
 </script>
