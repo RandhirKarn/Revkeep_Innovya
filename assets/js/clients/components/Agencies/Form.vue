@@ -802,6 +802,38 @@
 									</b-form-group>
 								</validation-provider>
 							</b-tab>
+
+							<b-tab title="Contact Number" id="outgoing_CONTACT" title-link-class="pr-lg-5">
+								<validation-provider
+									vid="outgoing_profile.contact_number"
+									name="Contact Number"
+									:rules="{ required: false, max: 50 }"
+									v-slot="validationContext"
+								>
+									<b-form-group
+										label="Contact Number"
+										label-for="outgoing_profile.fax"
+										label-cols-lg="4"
+										label-cols-xl="2"
+										description="Contact Number where outgoing documents can be sent."
+									>
+										<b-form-input
+											name="contact_number"
+											type="tel"
+											v-model="entity.outgoing_profile.fax_number"
+											v-mask="'(###) ###-####'"
+											:disabled="saving"
+											:state="getValidationState(validationContext)"
+											style="max-width: 24rem"
+										/>
+										<b-form-invalid-feedback
+											v-for="error in validationContext.errors"
+											:key="error"
+											v-text="error"
+										/>
+									</b-form-group>
+								</validation-provider>
+							</b-tab>
 						</b-tabs>
 					</b-card>
 				</b-card-body>
@@ -862,6 +894,7 @@ export default {
 				"outgoing_FAX",
 				"outgoing_WEBSITE",
 				"outgoing_MAIL",
+				"outgoing_CONTACT"
 			],
 		};
 	},

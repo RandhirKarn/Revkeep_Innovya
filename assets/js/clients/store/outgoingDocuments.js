@@ -27,7 +27,11 @@ export default {
 			{
 				name: "Manual",
 				value: "MANUAL",
+			},{
+				name: "Contact Number",
+				value: "CONTACT",
 			},
+
 		],
 	},
 	getters: {
