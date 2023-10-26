@@ -94,6 +94,10 @@
 										<h6>{{ entity.outgoing_profile.mail_to_name }}</h6>
 										<p class="small text-muted mb-0">Mail</p>
 									</b-list-group-item>
+									<b-list-group-item v-if="entity.outgoing_profile.contact">
+										<h6>{{ entity.outgoing_profile.contact_number }}</h6>
+										<p class="small text-muted mb-0">Contact Number</p>
+									</b-list-group-item>
 								</b-list-group>
 								<empty-result v-else icon="envelope">
 									No outgoing settings
@@ -234,6 +238,7 @@ export default {
 					fax_number: null,
 					electronic_website: null,
 					mail_to_name: null,
+					contact_number: null,
 				},
 				audit_reviewers: [],
 			},
