@@ -912,4 +912,22 @@ $routes->prefix('client', function (RouteBuilder $builder) {
 		'_method' => 'POST'
 	]);
 
+	$builder->connect('/outgoing', [
+		'controller' => 'Outgoing',
+		'action' => 'index',
+		
+	]);
+
+	$builder->connect('/outgoingDetails', [
+		'controller' => 'OutgoingDetails',
+		'action' => 'index',
+	    '_method' => 'POST'
+	]);
+
+	$builder->connect('/agencyList', [
+		'controller' => 'AgencyList',
+		'action' => 'index',
+		
+	]);
+
 });
