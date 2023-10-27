@@ -33,6 +33,7 @@ class OutgoingDetailsController extends AppController
                 $lastRow->website=$data['$lastRow->'];
                 $lastRow->contactNumber=$data['contactNumber'];
                 $lastRow->agency_id=$data['agency_id'];
+                $lastRow->delivery_method=$data['delivery_method'];
                 if ($outgoingDocument->save($lastRow)) {
                     // Successfully updated the last row
                     // Redirect or return a success response

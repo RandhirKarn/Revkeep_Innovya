@@ -930,4 +930,15 @@ $routes->prefix('client', function (RouteBuilder $builder) {
 		
 	]);
 
+	$builder->connect('/outgoingList', [
+		'controller' => 'OutgoingList',
+		'action' => 'index',
+		
+	]);
+
+	$builder->connect('/appealList', [
+		'controller' => 'AppealList',
+		'action' => 'index',
+		
+	]);
 });

@@ -801,6 +801,7 @@ export default {
 					website:this.websiteData,
 					contactNumber:this.contactNumberData,
 					agency_id:this.selectedAgency,
+					delivery_method:this.selectedOptionMethod,
 				};
 				axios.post('/client/outgoingDetails', postData)
 				.then(response => {

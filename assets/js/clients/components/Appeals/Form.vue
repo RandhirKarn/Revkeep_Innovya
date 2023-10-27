@@ -30,7 +30,7 @@
 						</b-form-group> 
 					</validation-provider> -->
 
-					<validation-provider
+					<!-- <validation-provider
 						vid="appeal_level_id"
 						name="Appeal Level"
 						:rules="{ required: true }"
@@ -44,7 +44,7 @@
 								:state="getValidationState(validationContext)"
 								name="appeal_level_id"
 								value-field="id"
-      							text-field="label"
+      							text-field="id"
 								required="required"
 								
 							/>
@@ -54,7 +54,12 @@
 								v-text="error"
 							/>
 						</b-form-group>
-					</validation-provider>
+					</validation-provider> -->
+
+					<b-form-group label="Level" label-cols-lg="4">
+						<b-form-select v-model="entity.appeal_level_id" :options="insuranceData" value-field="id" text-field="label"></b-form-select>
+					</b-form-group>
+						
 
 					<validation-provider
 						vid="letter_date"
@@ -801,7 +806,7 @@ export default {
 			agency_autofill:null,
 			daysToRespond:[],
 			insuranceData:[],
-			daysToRespond: null,
+			// daysToRespond: null,
 			gracedays: null
 			// selectedDaysToRespond: []
 		};
@@ -980,6 +985,7 @@ export default {
 					appeal_type_id: this.entity.appeal_type_id,
 					// appeal_level_id: this.entity.appeal_level_id,
 					appeal_level_id: null,
+					insurance_appeal_id:this.entity.appeal_level_id,
 					days_to_respond: this.entity.days_to_respond,
 					days_to_respond_from_id: this.entity.days_to_respond_from_id,
 					letter_date: this.entity.letter_date,
@@ -1161,12 +1167,10 @@ export default {
 		}
 
 	},
-	// watch: {
-	// 	dueDate: function (newVal) {
-	// 		if (newVal) {
-	// 			this.entity.due_date = newVal;
-	// 		}
-	// 	},
-	// },
+	watch: {
+		'entity.appeal_level_id': function(newValue, oldValue) {
+      console.log('Selected Option:', newValue);
+		}
+	},
 };
 </script>
