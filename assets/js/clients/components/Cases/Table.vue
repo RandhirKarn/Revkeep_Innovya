@@ -37,7 +37,7 @@
 		</template>
 
 		<template v-slot:[`cell(appeals)`]="{ value }">
-			<div v-if="value && value.length > 0" class="w-10 text-truncate">
+			<!-- <div v-if="value && value.length > 0" class="w-10 text-truncate">
 				{{
 					value
 						.map((item) => {
@@ -50,7 +50,10 @@
 						.join(", ")
 				}}
 			</div>
-			<div v-else class="text-muted">&mdash;</div>
+			<div v-else class="text-muted">&mdash;</div> -->
+			<div  class="w-10 text-truncate">
+				{{  checkAppealLevelName(value) }}  {{ generatedName }}
+			</div>
 		</template>
 
 		<template v-slot:[`cell(disciplines)`]="{ value }">
@@ -144,6 +147,7 @@
 import { mapGetters } from "vuex";
 import DataTable from "@/clients/components/Layout/data-table.vue";
 import CaseStatusLabel from "@/clients/components/Cases/StatusLabel.vue";
+import axios from "axios";
 
 export default {
 	name: "CaseTable",
@@ -176,6 +180,16 @@ export default {
 			type: Boolean,
 			default: true,
 		},
+	},
+	data() {
+		return {
+		outgoingList:null,
+		appealList:null,
+		generatedName:'',
+		value:null,
+
+		}
+
 	},
 	computed: {
 		fields() {
@@ -264,12 +278,51 @@ export default {
 			sortAliases: "cases/sortAliases",
 		}),
 	},
+	mounted() {
+		
+		this.test();
+
+		
+	},
 	methods: {
 		sorted(params) {
 			this.$emit("update:sort", params.sort);
 			this.$emit("update:sort-descending", params.sortDescending);
 			this.$emit("sorted", params);
 		},
+
+		async test(){
+			let name ="";
+			const url = "/client/insuranceappeal";
+				
+				const response = await axios.get(url, {
+				headers: {
+					"Accept": "application/json",
+					// You can add other headers here if needed
+				},
+				});
+				console.log("Response =", response);
+				this.outgoingList = response.data;
+
+			console.log('Outputed =', this.value);
+
+			this.outgoingList.forEach((item, index)=> {
+				this.value.forEach((appealInfo , j )=>{
+					if(item.id == appealInfo.insurance_appeal_id){
+						console.log("Match Found =", item.label)
+						name += item.label + ", ";
+					}
+				});
+			});
+			this.generatedName = name
+			console.log("Name final =", this.generatedName);
+		},
+
+		 checkAppealLevelName(value) {
+			this.value = value;
+			console.log("value = ", this.value);
+		},
+
 	},
 };
 </script>
