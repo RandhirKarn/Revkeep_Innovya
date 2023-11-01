@@ -238,7 +238,7 @@
 						<!-- <b-collapse id="collapseContact" role="tabpanel"> -->
 						<b-card>
 							<b-card-body>
-								<h5 class="h5 mb-4 text-uppercase font-weight-bold">Contact Person</h5>
+								<h5 class="h5 mb-4 text-uppercase font-weight-bold">Contact Information</h5>
 								<validation-provider
 									vid="contact_name"
 									name="Name"
