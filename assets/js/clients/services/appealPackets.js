@@ -25,7 +25,7 @@ export async function generate(id, params) {
 }
 
 export async function submit(id, params) {
-	alert('inside submit function on appealPackets.js page')
+	// alert('inside submit function on appealPackets.js page')
 	// /appeals/appealPackets/submit/packet/submit
 	const response = await api.post(`${url}/${id}/${subpart}/submit`, params);
 	return response.data;

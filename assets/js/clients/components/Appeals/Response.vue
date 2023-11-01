@@ -343,14 +343,15 @@
 							</b-form-group>
 
 							<!-- For rendering FTP Input -->
+							
 							<b-form-group label="FTP Portal URL" v-if="selectedOptionMethodFtp">
-								<b-form-input type="text" v-model="portalUrlFtp" class="mt-2"></b-form-input>
+								<b-form-input type="text" v-model="config.portalUrlFtp" class="mt-2"></b-form-input>
 							</b-form-group>
 							<b-form-group label="Username" v-if="selectedOptionMethodFtp">
-								<b-form-input type="text" v-model="usernameFtp" class="mt-2"></b-form-input>
+								<b-form-input type="text" v-model="config.usernameFtp" class="mt-2"></b-form-input>
 							</b-form-group>
 							<b-form-group label="Password" v-if="selectedOptionMethodFtp">
-								<b-form-input type="text" v-model="passwordFtp" class="mt-2"></b-form-input>
+								<b-form-input type="password" v-model="config.passwordFtp" class="mt-2"></b-form-input>
 							</b-form-group>
 
 
@@ -544,7 +545,7 @@ export default {
 			type: Object,
 			default: () => {
 				return {
-					id: null,
+					id: this.id,
 					case_id: null,
 					appeal_level: {
 						id: null,
@@ -681,9 +682,11 @@ export default {
 			selectedOptionMethodMail:null,
 			mailNotes:null,
 			packageSentViaSnailMail:null,
-			portalUrlFtp:null,
-			usernameFtp:null,
-			passwordFtp:null,
+			config: {
+			portalUrlFtp:"",
+			usernameFtp:"",
+			passwordFtp:"",
+			},
 			selectedOptionMethodFtp:false,
 			selectedOptionMethodEsmd:false,
 			portalUrlEsmd:null,
@@ -757,6 +760,33 @@ export default {
 				this.generating = false;
 			}
 		},
+//         async upload() {
+// 		const insid=this.value.id;
+// 		console.log("appeal id", insid);
+			
+//   try {
+//     // Use Axios to make a request to your PHP backend
+// 	console.log("ftpuload initiated");
+//     const resp = await axios.post("/client/ftpp", {
+// 		insid,
+// 		ftpPortalUrl: this.config.portalUrlFtp,
+// 		ftpUsername: this.config.usernameFtp,
+// 		ftpPassword: this.config.passwordFtp,
+//     });
+
+// 	this.$bvToast.toast('File successfully uploaded!', {
+//             title: 'Success',
+//             variant: 'success',
+//             autoHideDelay: 5000,
+//         });
+// 	console.log("yes", resp);
+//   } catch (e) {
+// 	console.log(e);
+//   } finally {
+//     console.log(1);
+//   }
+// },
+
 		async submitPacket() {
 			try {
 				this.submitting = true;
@@ -812,8 +842,33 @@ export default {
 				// Handle any errors that occur during the request
 				console.error('Error:', error);
 				});
-			}
-		},
+				// For FTP UPLOAD
+				const insid=this.value.id;
+				console.log("appeal id", insid);
+			
+		try {
+			// Use Axios to make a request to your PHP backend
+			console.log("ftpuload initiated");
+			const resp = await axios.post("/client/ftpp", {
+				insid,
+				ftpPortalUrl: this.config.portalUrlFtp,
+				ftpUsername: this.config.usernameFtp,
+				ftpPassword: this.config.passwordFtp,
+			});
+
+			this.$bvToast.toast('File successfully uploaded!', {
+					title: 'Success',
+					variant: 'success',
+					autoHideDelay: 5000,
+				});
+			console.log("yes", resp);
+		} catch (e) {
+			console.log(e);
+		} finally {
+			console.log(1);
+		}
+     	}
+	    },
 		updateStatus(selectedStatus) 
 		{
         // Call your function with the selected status and appealId
