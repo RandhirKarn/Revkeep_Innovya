@@ -110,7 +110,7 @@
 				</b-card-body>
 				<b-card-body v-else>
 					<div v-if="agency">
-						<h6>Submit to Agency</h6>
+						<!-- <h6>Submit to Agency</h6>
 
 						<div class="p-4 mb-4 d-flex justify-start align-items-top shadow-sm">
 							<b-avatar
@@ -137,17 +137,20 @@
 									</div>
 								</b-col>
 							</b-row>
-						</div>
+						</div> -->
 
-						<b-alert show v-if="!outgoingProfile" variant="warning">
+						<!-- <b-alert show v-if="!outgoingProfile" variant="warning">
 							No delivery settings have been configured for this agency. Outgoing documents will be queued
 							for manual delivery.
+						</b-alert> -->
+						<b-alert show v-if="!outgoingProfile" variant="warning">
+							
 						</b-alert>
 						<div v-else>
-							<h6>Primary Method: {{ agency.outgoing_primary_method_label }}</h6>
+							<!-- <h6>Primary Method: {{ agency.outgoing_primary_method_label }}</h6> -->
 							<b-list-group>
 
-<b-list-group-item v-if="outgoingProfile.full_mail_to_address">
+<!-- <b-list-group-item v-if="outgoingProfile.full_mail_to_address">
 
 	<b-form-checkbox class="mr-3"
 
@@ -181,13 +184,13 @@
 
 	</p>
 
-	<!-- <p class="small text-muted mb-0">Mail</p> -->
+	
 
-</b-list-group-item>
+</b-list-group-item> -->
 
-<b-list-group-item class="clearfix" v-if="outgoingProfile.email">
+<!-- <b-list-group-item class="clearfix" v-if="outgoingProfile.email">
 
-	<!-- <p class="small text-muted mb-0">Email</p> -->
+	
 
 	<b-form-checkbox class="mr-3"
 
@@ -211,11 +214,11 @@
 
    
 
-</b-list-group-item>
+</b-list-group-item> -->
 
-<b-list-group-item v-if="outgoingProfile.fax_number">
+<!-- <b-list-group-item v-if="outgoingProfile.fax_number">
 
-	<!-- <p class="small text-muted mb-0">Fax</p> -->
+	
 
 	<b-form-checkbox class="mr-3"
 
@@ -239,9 +242,9 @@
 
    
 
-</b-list-group-item>
+</b-list-group-item> -->
 
-<b-list-group-item v-if="outgoingProfile.electronic_website">
+<!-- <b-list-group-item v-if="outgoingProfile.electronic_website">
 
 	<b-form-checkbox class="mr-3"
 
@@ -263,11 +266,11 @@
 
 	</p>
 
-	<!-- <p class="small text-muted mb-0">Website</p> -->
+	
 
    
 
-</b-list-group-item>
+</b-list-group-item> -->
 
 
 
