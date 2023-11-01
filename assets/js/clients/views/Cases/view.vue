@@ -533,6 +533,7 @@ export default {
 				if(appeal.insurance_appeal_id == item._joinData.id){
 					console.log("match found =", item._joinData.label)
 					this.name = item._joinData.label;
+					
 				}
 			});
 			
