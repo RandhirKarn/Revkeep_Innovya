@@ -980,13 +980,16 @@ export default {
 			}
 		},
 		addAppealLevel() {
-			const nextId = this.availableAppealLevels[0]?.id ?? null;
+			let nextId = this.availableAppealLevels[0]?.id ?? null;
+			// if(nextId >= 7){
+			// 	nextId = 6;
+			// }
 			if (nextId )
 			this.entity.appeal_levels.push({
 				id: nextId,
 				_joinData: {
 					id: nextId,
-					// appeal_level_id: 0,
+					appeal_level_id: nextId,
 					label: "",
 					days_to_respond: 30,
 					max_days: 30,

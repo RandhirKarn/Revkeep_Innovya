@@ -79,7 +79,7 @@
 											<h6 class="h6 font-weight-bold mb-0">
 												{{ appealLevel._joinData?.label || appealLevel.name }}
 											</h6>
-											<p class="mb-0">{{ appealLevel.description }}</p>
+											<!-- <p class="mb-0">{{ appealLevel.description }}</p> -->
 											<p
 												v-if="appealLevel._joinData.days_to_respond"
 												class="small text-muted mb-0"
