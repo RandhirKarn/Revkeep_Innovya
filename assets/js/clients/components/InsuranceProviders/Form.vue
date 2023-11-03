@@ -77,10 +77,10 @@
 
 					 <div class="d-flex align-items-start">
     <validation-provider vid="default_insurance_type_id" name="Type" :rules="{ required: true }" v-slot="validationContext">
-      <b-form-group label="Audit Type(s)" label-for="default_insurance_type_id" label-cols-lg="3" label-cols-xl="3">
+      <b-form-group label="Audit Type(s)" label-for="default_insurance_type_id" label-cols-lg="4" label-cols-xl="4">
         <b-form-checkbox-group
           name="insurance_type_ids"
-          v-model="entity.insurance_type_ids"
+          v-model="audittype_data"
           :options="insuranceTypes"
           :disabled="saving || loadingInsuranceTypes"
           value-field="id"
@@ -751,6 +751,7 @@ export default {
 	},
 	data() {
 		return {
+			audittype_data:[],
 			loading: true,
 			saving: false,
 			entity: {
@@ -766,7 +767,7 @@ export default {
 				state: null,
 				zip: null,
 				insurance_types: [],
-                insurance_type_ids: [],
+                insurance_type_ids: this.audittype_data,
 				newAuditType: "",
 				appeal_levels: [
 					// {} Join table entity
@@ -878,9 +879,33 @@ export default {
 		} else {
 			this.loading = false;
 		}
-	
+		this.additionalData();
 	},
 	methods: {
+
+	async additionalData(){
+		const insid = this.id;
+        const url = "/client/audittype";
+				console.log("initiated");
+				const response = await axios.get(url, {
+				headers: {
+					"Accept": "application/json",
+					// You can add other headers here if needed
+				},
+				});
+				//insurance_type_ids: [],
+				console.log("Audit type latest", response.data);
+				response.data.forEach((item, index) => {
+				console.log(`Element at index ${index}:`, item);
+				if(item.insurance_provider_id == insid){
+					console.log("match found = ", item.insurance_type_id);
+
+					this.audittype_data.push(item.insurance_type_id);
+					console.log("output", this.audittype_data);
+				}
+				});
+				console.log("thiss insurance provider id", insid);
+	},
         openCustomAuditTypeModal() {
       // Open the custom audit type modal when the "Add More" button is clicked
       this.$bvModal.show("customAuditTypeModal");
@@ -889,14 +914,15 @@ export default {
 
 		console.log("started");
         const newType = this.newAuditType;
-
+		const insid = this.id;
+        console.log(insid);
         // Check if the new type is not empty
         if (newType.trim() === '') {
             return;
         }
 
         // Send a POST request to your controller to add the new type
-        axios.post('/client/addtype', { newType })
+        axios.post('/client/addtype', { newType , insid})
             .then((response) => {
                 // Handle the response, e.g., update the insuranceTypes list
                 this.insuranceTypes.push(response.data);
@@ -952,8 +978,8 @@ export default {
 						} else {
 						this.entity.name = this.entity.name;
 						}
-						 // Populate the insurance_types array with the selected insurance types
-						this.entity.insurance_types = this.entity.insurance_type_ids.map(id => {
+						// Populate the insurance_types array with the selected insurance types
+						this.entity.insurance_types = this.audittype_data.map(id => {
 						return { id }; // Assuming the structure of insurance types is an object with an 'id' field
     });
 				const request = Object.assign({}, this.entity);

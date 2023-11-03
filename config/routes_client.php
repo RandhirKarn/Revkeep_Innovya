@@ -951,4 +951,9 @@ $routes->prefix('client', function (RouteBuilder $builder) {
 		'controller' => 'InsuranceTypesList',
 		'action' => 'index',
 	]);
+	$builder->connect('/audittype', [
+		'controller' => 'Audittype',
+		'action' => 'index',
+		
+	]);
 });
