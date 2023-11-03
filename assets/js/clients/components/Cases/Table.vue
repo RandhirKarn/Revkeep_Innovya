@@ -1,4 +1,7 @@
 <template>
+	<div>
+	<div  v-if="loading">Loading</div>
+	<div v-else>
 	<DataTable v-bind="{ fields, sortAliases, ...$attrs }" v-on="$listeners" @sorted.once="sorted">
 		<template v-slot:[`cell(status)`]="{ value, item }">
 			<div v-if="value && item">
@@ -52,7 +55,7 @@
 			</div>
 			<div v-else class="text-muted">&mdash;</div> -->
 			<div  class="w-10 text-truncate">
-				{{  checkAppealLevelName(value) }}  {{ generatedName }}
+				{{  checkAppealLevelName(value) }}  
 			</div>
 		</template>
 
@@ -141,6 +144,8 @@
 			<div v-else class="text-muted">&mdash;</div>
 		</template>
 	</DataTable>
+	</div>
+	</div>
 </template>
 
 <script>
@@ -183,14 +188,23 @@ export default {
 	},
 	data() {
 		return {
-		outgoingList:null,
-		appealList:null,
-		generatedName:'',
-		value:null,
+			loading: true,
+      responseData: null,
 
 		}
 
 	},
+	async created() {
+    try {
+      const response = await axios.get('/client/insuranceappeal');
+      this.responseData = response.data;
+	  console.log('RESPONSE =', this.responseData);
+    } catch (error) {
+      console.error('Error:', error);
+    } finally {
+      this.loading = false; // Set loading to false when the request is completed
+    }
+  },
 	computed: {
 		fields() {
 			return [
@@ -278,12 +292,12 @@ export default {
 			sortAliases: "cases/sortAliases",
 		}),
 	},
-	mounted() {
+	// mounted() {
 		
-		this.test();
+	// 	this.test();
 
 		
-	},
+	// },
 	methods: {
 		sorted(params) {
 			this.$emit("update:sort", params.sort);
@@ -291,36 +305,46 @@ export default {
 			this.$emit("sorted", params);
 		},
 
-		async test(){
-			let name ="";
-			const url = "/client/insuranceappeal";
+		// async test(){
+		// 	let name ="";
+		// 	const url = "/client/insuranceappeal";
 				
-				const response = await axios.get(url, {
-				headers: {
-					"Accept": "application/json",
-					// You can add other headers here if needed
-				},
-				});
-				console.log("Response =", response);
-				this.outgoingList = response.data;
+		// 		const response = await axios.get(url, {
+		// 		headers: {
+		// 			"Accept": "application/json",
+		// 			// You can add other headers here if needed
+		// 		},
+		// 		});
+		// 		console.log("Response =", response);
+		// 		this.outgoingList = response.data;
 
-			console.log('Outputed =', this.value);
+		// 	console.log('Outputed =', this.value);
 
-			this.outgoingList.forEach((item, index)=> {
-				this.value.forEach((appealInfo , j )=>{
-					if(item.id == appealInfo.insurance_appeal_id){
-						console.log("Match Found =", item.label)
-						name += item.label + ", ";
+		// 	this.outgoingList.forEach((item, index)=> {
+		// 		this.value.forEach((appealInfo , j )=>{
+		// 			if(item.id == appealInfo.insurance_appeal_id){
+		// 				console.log("Match Found =", item.label)
+		// 				name += item.label + ", ";
+		// 			}
+		// 		});
+		// 	});
+		// 	this.generatedName = name
+		// 	console.log("Name final =", this.generatedName);
+		// },
+
+		 checkAppealLevelName(value) {
+			
+			console.log("valued = ", value);
+			let name="";
+			value.forEach((item,index)=>{
+				this.responseData.forEach((data)=>{
+					if(item.insurance_appeal_id==data.id){
+						console.log("Match founded =", data.label);
+						name+=data.label+", ";
 					}
 				});
 			});
-			this.generatedName = name
-			console.log("Name final =", this.generatedName);
-		},
-
-		 checkAppealLevelName(value) {
-			this.value = value;
-			console.log("value = ", this.value);
+			return name;
 		},
 
 	},
