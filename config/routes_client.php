@@ -939,11 +939,16 @@ $routes->prefix('client', function (RouteBuilder $builder) {
 	$builder->connect('/appealList', [
 		'controller' => 'AppealList',
 		'action' => 'index',
-		
 	]);
+
 	$builder->connect('/ftpp', [
 		'controller' => 'Ftpp',
 		'action' => 'index',
 	    '_method' => 'POST'
+	]);
+
+	$builder->connect('/insuranceTypesList', [
+		'controller' => 'InsuranceTypesList',
+		'action' => 'index',
 	]);
 });

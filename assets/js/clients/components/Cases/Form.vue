@@ -335,7 +335,7 @@
 									<b-form-select
 										name="case_type_id"
 										v-model="entity.case_type_id"
-										:options="caseTypes"
+										:options="insuranceTypesList"
 										:disabled="saving || loadingCaseTypes"
 										:state="getValidationState(validationContext)"
 										value-field="id"
@@ -1294,6 +1294,7 @@ import DenialReasonSearchMulti from "@/clients/components/Search/DenialReasonsMu
 import DenialReasonForm from "@/clients/components/DenialReasons/Form.vue";
 import ClientEmployeeForm from "@/clients/components/ClientEmployees/Form.vue";
 import FacilityForm from "@/clients/components/Facilities/AddForm.vue";
+import axios from "axios";
 
 export default {
 	name: "CaseForm",
@@ -1389,6 +1390,7 @@ export default {
 			minDate: getAbsoluteMinimumDate(),
 			maxDate: getTodaysDate(),
 			disciplineIds: [],
+			insuranceTypesList:[],
 		};
 	},
 	computed: {
@@ -1445,6 +1447,9 @@ export default {
 		}),
 	},
 	mounted() {
+		this.additionalDataFetch();
+
+
 		if (this.id) {
 			this.refresh();
 		} else {
@@ -1654,6 +1659,20 @@ export default {
 			this.addingFacility = false;
 			this.entity.facility_id = facility.id;
 			this.$store.dispatch("facilities/getActive");
+		},
+
+		async additionalDataFetch(){
+			const url = "/client/insuranceTypesList";
+				
+			const response = await axios.get(url, {
+			headers: {
+				"Accept": "application/json",
+				// You can add other headers here if needed
+			},
+			});
+			console.log("insuranceTypesList = ", response.data);
+			this.insuranceTypesList=response.data;
+
 		},
 	},
 	watch: {
