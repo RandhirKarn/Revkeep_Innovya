@@ -305,7 +305,7 @@
 						<b-form-select label=" Delivery Method " v-model="selectedOptionMethod" class="mt-2" @change="handleDeliveryMethodChange">
 							<option value="Email">Email</option>
 							<option value="Fax">Fax</option>
-							<option value="Website">Website</option>
+							<option value="Website">Website Portal</option>
 							<option value="Contact Number">Contact Number</option>
 							<option value="Mail">Mail</option>
 							<option value="FTP">FTP</option>

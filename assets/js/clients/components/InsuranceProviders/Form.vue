@@ -650,7 +650,7 @@
 									:rules="{ required: false }"
 									v-slot="validationContext"
 								>
-									<b-form-group label="Fax 123" label-for="fax" label-cols-lg="4">
+									<b-form-group label="Fax" label-for="fax" label-cols-lg="4">
 										<b-form-input
 											name="fax"
 											type="text"

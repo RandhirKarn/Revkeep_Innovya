@@ -320,7 +320,7 @@
 									</b-form-group>
 								</validation-provider>
 
-								<validation-provider
+								<!-- <validation-provider
 									vid="contact_phone"
 									name="Phone"
 									:rules="{ required: false, max: 50 }"
@@ -346,7 +346,17 @@
 											v-text="error"
 										/>
 									</b-form-group>
-								</validation-provider>
+								</validation-provider> -->
+
+								<b-form-group
+									label="Website"
+									label-cols-lg="4"
+									label-cols-xl="3"
+								>
+									<b-form-input
+
+									/>
+								</b-form-group>
 
 								<validation-provider
 									vid="contact_fax"
