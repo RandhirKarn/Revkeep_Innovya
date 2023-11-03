@@ -528,17 +528,19 @@ export default {
 			
 			console.log("case testing = ",caseEntity);
 			console.log("appeal testing = ",appeal);
+			let name ="";
 			caseEntity.insurance_provider.appeal_levels.map((item , index)=>{
 				console.log("inside loop")
 				if(appeal.insurance_appeal_id == item._joinData.id){
 					console.log("match found =", item._joinData.label)
-					this.name = item._joinData.label;
+					name = item._joinData.label;
 					
 				}
 			});
 			
 
-			return this.name;
+			// return this.name;
+			return name;
 			
 		}
 	},
