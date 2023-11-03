@@ -239,8 +239,9 @@
 							</b-row>
 							<!-- For rendering requests for every appeal -->
 							<!-- use appeal_level_id for rendering -->
+							<div v-if="hasRequests">
 							<b-card no-body>
-								<b-card-header >Requests </b-card-header>
+								<b-card-header  >Requests </b-card-header>
 							 <div v-for="request,j in request_list" :key="request.id" class="shadow-sm upper-space">
 								
 								<!-- <b-row v-if="request.case_id===appeal.case_id && request.appeal_level == appeal.appeal_level_id " > -->
@@ -296,6 +297,7 @@
 								</b-row>
 							 </div>
 							</b-card>
+							</div>
 							<!-- <b-row>
 								<b-col cols="12">
 									<b-dropdown :id="'dropdown-' + appeal.id" variant="btn btn-secondary"  class="dropdown-container">
@@ -416,6 +418,7 @@ export default {
 			loading: false,
 			attaching: false,
 			request_list:null,
+			request_list_length:false,
 			selectedOptionL1: null,
 			selectedOptionL2: null,
 			selectedOptionL3: null,

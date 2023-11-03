@@ -1,4 +1,7 @@
 <template>
+	<div>
+		<div v-if="loading">Loading..</div>
+	<div v-else>
 	<DataTable v-bind="$attrs" v-on="$listeners" :fields="fields" :sort-aliases="sortAliases" @sorted.once="sorted">
 		<template v-slot:[`cell(appeal_status)`]="{ item, value }">
 			<span v-if="value">
@@ -25,18 +28,19 @@
 			</span>
 		</template>
 
-		<template v-slot:[`cell(appeal_type.name)`]="{ value }">
+		<template v-slot:[`cell(appeal_type.name)`]="{  value }">
 			<span v-if="value">{{ value }}</span>
 			<span v-else class="text-muted">
 				<span>&mdash;</span>
 			</span>
 		</template>
 
-		<template v-slot:[`cell(appeal_level.name)`]="{ value }">
+		<template v-slot:[`cell(appeal_level.name)`]="{ item,value }">
 			<span v-if="value">{{ value }}</span>
-			<span v-else class="font-weight-bold text-uppercase text-danger">
-				<font-awesome-icon icon="exclamation-triangle" fixed-width />
-				<span>Missing</span>
+			<!-- <span v-else class="font-weight-bold text-uppercase text-danger"> -->
+			<span v-else >
+				<!-- <font-awesome-icon icon="exclamation-triangle" fixed-width /> -->
+				<span>{{ checkAppealLevel(item, value) }}</span>
 			</span>
 		</template>
 
@@ -174,14 +178,18 @@
 			<span v-else class="text-muted">&mdash;</span>
 		</template>
 	</DataTable>
+	</div>	
+	</div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
 import DataTable from "@/clients/components/Layout/data-table.vue";
 import AppealStatusLabel from "@/clients/components/Appeals/StatusLabel.vue";
+import axios from "axios";
 
 export default {
+	
 	name: "AppealTable",
 	components: {
 		AppealStatusLabel,
@@ -209,6 +217,23 @@ export default {
 			default: true,
 		},
 	},
+	data(){
+		return{
+			loading: true,
+      		responseData: null,
+		};
+	},
+	async created() {
+    try {
+      const response = await axios.get('/client/insuranceappeal');
+      this.responseData = response.data;
+	  console.log("RESPONSE =" , this.responseData);
+    } catch (error) {
+      console.error('Error:', error);
+    } finally {
+      this.loading = false; // Set loading to false when the request is completed
+    }
+  },
 	computed: {
 		fields() {
 			return [
@@ -322,12 +347,33 @@ export default {
 			sortAliases: "appeals/sortAliases",
 		}),
 	},
+	mounted() {
+		// this.test();		
+	},
 	methods: {
 		sorted(params) {
 			this.$emit("update:sort", params.sort);
 			this.$emit("update:sort-descending", params.sortDescending);
 			this.$emit("sorted", params);
 		},
+		checkAppealLevel(items, value){
+			console.log("item =", items);
+			console.log("valueing =", value);
+			console.log("return", items.status_variant);
+			let name ="";
+			this.responseData.forEach((item, index)=>{
+				if(items.insurance_appeal_id == item.id){
+					console.log("Match Found = ", item.label);
+					name = item.label;
+				}
+			});
+			return name
+		},
+		
 	},
+// 	beforeCreate() {
+//     // Execute the fetchData method during component initialization
+//     this.test();
+//   },
 };
 </script>

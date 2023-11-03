@@ -878,9 +878,15 @@ export default {
 		} else {
 			this.loading = false;
 		}
+
+		this.test();
 	
 	},
 	methods: {
+		test(){
+			console.log("ID =",this.entity.id);
+			console.log("ID Direct", this.id);
+		},
         openCustomAuditTypeModal() {
       // Open the custom audit type modal when the "Add More" button is clicked
       this.$bvModal.show("customAuditTypeModal");
