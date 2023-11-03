@@ -239,7 +239,7 @@
 						<b-card>
 							<b-card-body>
 								<h5 class="h5 mb-4 text-uppercase font-weight-bold">Contact Information</h5>
-								<validation-provider
+								<!-- <validation-provider
 									vid="contact_name"
 									name="Name"
 									:rules="{ required: false, max: 50 }"
@@ -264,9 +264,9 @@
 											v-text="error"
 										/>
 									</b-form-group>
-								</validation-provider>
+								</validation-provider> -->
 
-								<validation-provider
+								<!-- <validation-provider
 									vid="contact_title"
 									name="Title"
 									:rules="{ required: false, max: 50 }"
@@ -291,7 +291,7 @@
 											v-text="error"
 										/>
 									</b-form-group>
-								</validation-provider>
+								</validation-provider> -->
 
 								<validation-provider
 									vid="contact_email"
@@ -347,7 +347,15 @@
 										/>
 									</b-form-group>
 								</validation-provider> -->
+								<b-form-group
+									label="Phone"
+									label-cols-lg="4"
+									label-cols-xl="3"
+								>
+									<b-form-input
 
+									/>
+								</b-form-group>
 								<b-form-group
 									label="Website"
 									label-cols-lg="4"
