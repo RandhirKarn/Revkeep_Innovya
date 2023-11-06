@@ -81,7 +81,7 @@
 				<b-dropdown
 										split
 										right
-										@click="attachToAppeal(appeal, { redirect: false })"
+										@click="attachToCase(caseEntity, { redirect: false })"
 										:disabled="attaching"
 										variant="primary"
 									>
@@ -90,7 +90,7 @@
 											<!-- <span>Attach</span> -->
 										</template>
 										<b-dropdown-item-button
-											@click="attachToAppeal(appeal, { redirect: true })"
+											@click="attachToCase(caseEntity, { redirect: true })"
 											:disabled="attaching"
 											title="Attach and view appeal"
 										>
@@ -178,7 +178,7 @@
 			</div> -->
 			<div v-if="hasAppeals">
 				<b-card no-body>
-					<b-card-header>Appeals</b-card-header>
+					<b-card-header>Appeals123</b-card-header>
 					<b-list-group flush>
 						<b-list-group-item v-for="appeal , i in appeals" :key="appeal.id" class="shadow-sm">
 							<b-row>
@@ -239,10 +239,10 @@
 							</b-row>
 							<!-- For rendering requests for every appeal -->
 							<!-- use appeal_level_id for rendering -->
-							<div v-if="hasRequests">
+							
 							<b-card no-body>
-								<b-card-header  >Requests </b-card-header>
-							 <div v-for="request,j in request_list" :key="request.id" class="shadow-sm upper-space">
+								<b-card-header v-for="r,ji in request_list" :key="r.id" v-if="r.case_id===appeal.case_id && r.appeal_level == i">Requests{{ checkRequest() }} </b-card-header>
+							 <div v-for="request,j in request_list" :key="request.id" v-if="showRequest" class="shadow-sm upper-space">
 								
 								<!-- <b-row v-if="request.case_id===appeal.case_id && request.appeal_level == appeal.appeal_level_id " > -->
 									<b-row v-if="request.case_id===appeal.case_id && request.appeal_level == i">
@@ -265,9 +265,10 @@
 											</span>
 										</p>
 										<div class="custom-padding">
+											
 											<label class="checkbox-container">
 												Response Received
-												<input type="checkbox" v-model="responseReceived" class="response-checkbox">
+												<input type="checkbox" v-model="responseReceived[j]" class="response-checkbox">
 												<span class="checkmark"></span>
 											</label>
 										</div>
@@ -297,7 +298,7 @@
 								</b-row>
 							 </div>
 							</b-card>
-							</div>
+							
 							<!-- <b-row>
 								<b-col cols="12">
 									<b-dropdown :id="'dropdown-' + appeal.id" variant="btn btn-secondary"  class="dropdown-container">
@@ -319,6 +320,25 @@
 									</b-dropdown>
 								</b-col>
 							</b-row> -->
+							<b-row>
+								<!-- <b-col cols="12" md="6" lg="12" xl="6" class="text-left mb-2 mb-md-0">
+									<b-form-group label="Decision Options" >
+										<b-form-select v-model="decisionOptionsList[i]" :options="decisionOptionsListMethod(appeal)" ></b-form-select>
+									</b-form-group>
+									<b-form-group label="Amount" v-if="decisionOptionsList[i]=='Partially Favorable'" >
+										<b-form-input ></b-form-input> 
+									</b-form-group>
+								</b-col> -->
+
+								<b-col cols="12" md="6" lg="12" xl="12" class="text-left mb-2 mb-md-2">
+									<b-form-group label="Decision Options" label-cols-lg="5" class="mb-2 mb-md-2">
+										<b-form-select v-model="decisionOptionsList[i]" :options="decisionOptionsListMethod(appeal)" ></b-form-select>
+									</b-form-group>
+									<b-form-group label="Amount" v-if="decisionOptionsList[i]=='Partially Favorable'" label-cols-lg="5" class="mb-2 mb-md-2">
+										<b-form-input ></b-form-input> 
+									</b-form-group>
+								</b-col>
+							</b-row>
 						</b-list-group-item>
 					</b-list-group>
 				</b-card>
@@ -426,9 +446,14 @@ export default {
 			selectedOptionL5: null,
 			selectedOptionL6: null,
 			selectedOptionL7: null,
-			responseReceived:false,
+			responseReceived:[],
+			responseReceivedList:[], //for tracking partially favourable responses
 			appealLevelNames:[],
 			appealLevelNamesObj:[],
+			showRequest:false,
+			decisionOptions:null,
+			decisionOptionsList:[],
+			insuranceResponse:[],
 		};
 	},
 	computed: {
@@ -497,14 +522,14 @@ export default {
 		async attachToCase(caseEntity, options = {}) {
 			let message = `Are you sure you want to merge the current document in with case #${caseEntity.id} (Admit Date: ${caseEntity.admit_date})?`;
 
-			if (!redirectAfter) {
-				message +=
-					" The document will be removed from the queue and you will need to search the patient in order to find it again.";
-			}
+			// if (!redirectAfter) {
+			// 	message +=
+			// 		" The document will be removed from the queue and you will need to search the patient in order to find it again.";
+			// }
 
-			if (!confirm(message)) {
-				return false;
-			}
+			// if (!confirm(message)) {
+			// 	return false;
+			// }
 
 			try {
 				const response = await this.$store.dispatch("incomingDocuments/attachCase", {
@@ -529,9 +554,10 @@ export default {
 					message: "An error occurred when attempting to attach to case.",
 				});
 			} finally {
-				if (!redirectAfter) {
-					this.$emit("refresh");
-				}
+				// if (!redirectAfter) {
+				// 	this.$emit("refresh");
+				// }
+				this.$emit("refresh");
 			}
 		},
 
@@ -560,6 +586,7 @@ export default {
 				console.log('request list updated  = ',this.request_list);
 				console.log("appeals =" , this.appeals);
 				console.log("case entity = ",this.caseEntity);
+				this.insuranceResponse = responseInsurance.data;
 				console.log("insurance response = ", responseInsurance.data);
 				this.appealLevelNames = [];
 				this.appealLevelNamesObj = [];
@@ -622,6 +649,35 @@ export default {
         // Call your function with the selectedStatus and appealId as arguments
         // e.g., this.yourFunction(selectedStatus, appealId);
         },
+		checkRequest(){
+			this.showRequest=true;
+		},
+
+		decisionOptionsListMethod(appeal){
+			console.log("output =", appeal );
+			console.log("DECISON LIST=",this.decisionOptionsList);
+			
+			let outputArr=[];
+			this.insuranceResponse.forEach((item,index)=>{
+				if(appeal.insurance_appeal_id==item.id){
+					console.log("DEcision opt =", item.decision_options);
+					if(item.decision_options==1){
+						outputArr.push('No Findings');
+						outputArr.push('Issues');
+					}
+					else if(item.decision_options==2){
+						outputArr.push('Reversed');
+						outputArr.push('Held');
+					}
+					else if(item.decision_options==3){
+						outputArr.push('Not Favorable');
+						outputArr.push('Partially Favorable');
+						outputArr.push('Favorable');
+					}
+				}
+			});
+			return outputArr
+		}
 	},
 	mounted(){
 		this.test();
