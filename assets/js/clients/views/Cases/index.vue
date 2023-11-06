@@ -126,7 +126,7 @@
   
    
   
-	  const csvContent = "Case ID, Patient Name, Status, Facility, Assigned To, Denial Type, Admit Date, Appeals, Disciplines, Physician, Outcome, Insurance Provider, Insurance Type, Disputed Amount, Added\n" +
+	  const csvContent = "Case ID, Patient Name, Status, Facility, Assigned To, Denial Type, Admit Date, Disciplines, Physician, Outcome, Insurance Provider, Insurance Type, Disputed Amount, Added\n" +
   
 		cases.map(c => {
   
@@ -134,16 +134,18 @@
   
 		  const { id, patient, status, facility, assigned_to_user, denial_type, admit_date, disciplines, client_employee, case_outcome, insurance_provider, insurance_type, disputed_amount, created, appeals } = c;
   
-   
+		  
   
 		  const facilityName = facility ? (facility.name || facility.full_address || "NO DATA") : "NO DATA";
-  
+		  
+		  
 		  const assignedToFullName = assigned_to_user ? assigned_to_user.full_name || "NO DATA" : "NO DATA";
-  
+
+		  
 		  const disciplineNames = disciplines ? disciplines.map(discipline => discipline.name).join(", ") || "NO DATA" : "NO DATA";
-  
-		  const appealLevels = appeals ? appeals.map(appeal => appeal.appeal_level.name).join(", ") || "NO DATA" : "NO DATA";
-  
+		  console.log("before app name");
+		//   const appealLevels = appeals ? appeals.map(appeal => appeal.appeal_level.name).join(", ") || "NO DATA" : "NO DATA";
+		  console.log("after appeal");
 		  const physicianFullName = client_employee ? client_employee.full_name || "NO DATA" : "NO DATA";
   
 		  const caseOutcomeName = case_outcome ? case_outcome.name || "NO DATA" : "NO DATA";
@@ -151,6 +153,7 @@
 		  const insuranceProviderName = insurance_provider ? insurance_provider.name || "NO DATA" : "NO DATA";
   
 		  const insuranceTypeName = insurance_type ? insurance_type.name || "NO DATA" : "NO DATA";
+		 
   
 		  const formattedAdmitDate = admit_date ? new Date(admit_date).toLocaleDateString("en-US") : "NO DATA";
   
@@ -174,7 +177,8 @@
   
    
   
-		  return `${id},${patient?.full_name || "NO DATA"},${status || "NO DATA"},${facilityName},${assignedToFullName},${denial_type?.name || "NO DATA"},${formattedAdmitDate},"${appealLevels}",${disciplineNames},${physicianFullName},${caseOutcomeName},${insuranceProviderName},${insuranceTypeName},${disputedAmount},${formattedAddedDate}`;
+		//   return `${id},${patient?.full_name || "NO DATA"},${status || "NO DATA"},${facilityName},${assignedToFullName},${denial_type?.name || "NO DATA"},${formattedAdmitDate},"${appealLevels}",${disciplineNames},${physicianFullName},${caseOutcomeName},${insuranceProviderName},${insuranceTypeName},${disputedAmount},${formattedAddedDate}`;
+		return `${id},${patient?.full_name || "NO DATA"},${status || "NO DATA"},${facilityName},${assignedToFullName},${denial_type?.name || "NO DATA"},${formattedAdmitDate},${disciplineNames},${physicianFullName},${caseOutcomeName},${insuranceProviderName},${insuranceTypeName},${disputedAmount},${formattedAddedDate}`;
   
 		}).join("\n");
   
