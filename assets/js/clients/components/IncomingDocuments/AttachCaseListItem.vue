@@ -320,6 +320,7 @@
 									</b-dropdown>
 								</b-col>
 							</b-row> -->
+							
 							<b-row>
 								<!-- <b-col cols="12" md="6" lg="12" xl="6" class="text-left mb-2 mb-md-0">
 									<b-form-group label="Decision Options" >
@@ -329,16 +330,19 @@
 										<b-form-input ></b-form-input> 
 									</b-form-group>
 								</b-col> -->
+    <b-col cols="12" md="6" lg="12" xl="12" class="text-left mb-8 relative">
+        <b-form-group label="Decision Options" label-cols-lg="5" class="mb-4 flex items-center">
+            <b-form-select v-model="decisionOptionsList[i]" :options="decisionOptionsListMethod(appeal)" class="mt-2"></b-form-select>
+        </b-form-group>
+        <b-form-group v-if="decisionOptionsList[i]=='Partially Favorable'" label="Amount" label-cols-lg="5" class="mb-4">
+            <b-form-input></b-form-input> 
+        </b-form-group>
+    </b-col>
+</b-row>
 
-								<b-col cols="12" md="6" lg="12" xl="12" class="text-left mb-2 mb-md-2">
-									<b-form-group label="Decision Options" label-cols-lg="5" class="mb-2 mb-md-2">
-										<b-form-select v-model="decisionOptionsList[i]" :options="decisionOptionsListMethod(appeal)" ></b-form-select>
-									</b-form-group>
-									<b-form-group label="Amount" v-if="decisionOptionsList[i]=='Partially Favorable'" label-cols-lg="5" class="mb-2 mb-md-2">
-										<b-form-input ></b-form-input> 
-									</b-form-group>
-								</b-col>
-							</b-row>
+
+
+
 						</b-list-group-item>
 					</b-list-group>
 				</b-card>
