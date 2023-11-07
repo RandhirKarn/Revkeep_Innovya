@@ -422,6 +422,8 @@ export default {
 				return {
 					id: null,
 					created: null,
+					appeal_id: null,
+					case_id: null,
 				};
 			},
 		},
@@ -429,6 +431,7 @@ export default {
 	
 	data() {
 		return {
+			document: this.document,
 			addingAppeal: false,
 			appeals: this.caseEntity.appeals || [],
 
@@ -518,19 +521,29 @@ export default {
 			} finally {
 				this.attaching = false;
 			}
+			const dateCreated = this.$filters.formatTimestamp(document.created);
+
+			// var message = `Document from ${dateCreated} was attached to case #${document.case_id}.`;
+
+			if (document.appeal_id) {
+				const appealLevelName = "#" + document.appeal_id;
+				message = `Document from ${dateCreated} was attached to appeal ${appealLevelName} in case #${document.case_id}.`;
+			}
+			if (document.request_id) {
+				message = `Document from ${dateCreated} was attached to request #${document.request_id}.`;
+			}
+
+			this.$store.dispatch("notify", {
+				variant: "primary",
+				title: "Document Attached",
+				message: message,
+			});
+
+			this.$emit("attached", document);
+			this.$store.dispatch("updateState");
+			this.refresh();
 		},
 		async attachToCase(caseEntity, options = {}) {
-			let message = `Are you sure you want to merge the current document in with case #${caseEntity.id} (Admit Date: ${caseEntity.admit_date})?`;
-
-			// if (!redirectAfter) {
-			// 	message +=
-			// 		" The document will be removed from the queue and you will need to search the patient in order to find it again.";
-			// }
-
-			// if (!confirm(message)) {
-			// 	return false;
-			// }
-
 			try {
 				const response = await this.$store.dispatch("incomingDocuments/attachCase", {
 					id: this.document.id,
@@ -538,8 +551,9 @@ export default {
 				});
 
 				this.$emit("attached-case", response);
-
+                console.log("options=", options);
 				if (options.redirect && options.redirect === true) {
+					console.log("inside case redirect");
 					this.$router.push({
 						name: "cases.view",
 						params: {
@@ -554,11 +568,21 @@ export default {
 					message: "An error occurred when attempting to attach to case.",
 				});
 			} finally {
-				// if (!redirectAfter) {
-				// 	this.$emit("refresh");
-				// }
-				this.$emit("refresh");
+			const dateCreated = this.$filters.formatTimestamp(document.created);
+			var message = `Document from ${dateCreated} was attached to case #${caseEntity.id}.`;
+			this.$store.dispatch("notify", {
+				variant: "primary",
+				title: "Document Attached To Case",
+				message: message,
+			});
+			if (options.redirect === false) {
+				console.log("inside test env");
+			this.$emit("attached", document);
+			this.$store.dispatch("updateState");
+			// this.refresh();
 			}
+			this.$emit("refresh");
+		}
 		},
 
 		async test(){

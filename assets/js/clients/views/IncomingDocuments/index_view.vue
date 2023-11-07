@@ -194,8 +194,8 @@ import AppealStatusLabel from "@/clients/components/Appeals/StatusLabel.vue";
 import IncomingDocumentAttach from "@/clients/components/IncomingDocuments/Attach.vue";
 import PatientForm from "@/clients/components/Patients/Form.vue";
 import PatientSearch from "@/clients/components/Search/Patients.vue";
-
 import PdfFrame from "@/shared/components/PdfFrame.vue";
+
 
 export default {
 	name: "IndexViewIncomingDocument",
@@ -382,10 +382,11 @@ export default {
 		attachedDocument(document) {
 			const dateCreated = this.$filters.formatTimestamp(document.created);
 
-			var message = `Document from ${dateCreated} was attached to case #${document.case_id}.`;
-
-			if (document.appeal_id) {
-				const appealLevelName = document.appeal.appeal_level.name || "#" + document.appeal_id;
+			var message = `Please view your file from cases section`;
+            console.log("docments=" , document);
+			if (document.appeal_id != null) {
+				console.log("inside appeal");
+				const appealLevelName = "#" + document.appeal_id;
 				message = `Document from ${dateCreated} was attached to appeal ${appealLevelName} in case #${document.case_id}.`;
 			}
 			if (document.request_id) {
