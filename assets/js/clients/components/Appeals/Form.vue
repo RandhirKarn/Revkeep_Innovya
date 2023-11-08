@@ -112,11 +112,11 @@
 					</validation-provider>
 					<validation-provider
 						vid="days_to_respond"
-						name="Days to respond"
+						name="Days to Decision"
 						:rules="{ required: true, min: 0, max: 365 }"
 						v-slot="validationContext"
 					>
-						<b-form-group label="Days To Decision " label-for="days_to_respond" label-cols-lg="4">
+						<b-form-group label="Days To Decision" label-for="days_to_respond" label-cols-lg="4">
 							<b-form-input
 								name="days_to_respond"
 								type="number"

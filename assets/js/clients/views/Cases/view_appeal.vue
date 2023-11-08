@@ -125,11 +125,11 @@
 								</template>
 								<b-tabs card pills>
 									<b-tab no-body lazy>
-										<template #title>Template</template>
+										<template #title>Cover Page</template>
 										<appeal-cover-page :appeal="appeal" @saved="savedCoverPage" />
 									</b-tab>
 
-									<!-- <b-tab no-body lazy>
+									<b-tab no-body lazy>
 										<template #title>Template</template>
 										<b-card-body>
 											<empty-result>
@@ -137,7 +137,7 @@
 												<template #content> No appeal response templates created. </template>
 											</empty-result>
 										</b-card-body>
-									</b-tab> -->
+									</b-tab>
 									<b-tab no-body lazy>
 										<template #title>Forms</template>
 										<b-card-body>
