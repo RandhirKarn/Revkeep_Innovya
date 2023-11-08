@@ -227,7 +227,7 @@
 											<b-col cols="12" xl="6">
 												<validation-provider
 													vid="max_days"
-													name="Maximum Response Days"
+													name="Maximum Decision Days"
 													:rules="{ required: true, min: 0, max: 365 }"
 													v-slot="validationContext"
 												>
