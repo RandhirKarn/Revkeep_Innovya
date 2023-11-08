@@ -112,7 +112,7 @@
 					</validation-provider>
 					<validation-provider
 						vid="days_to_respond"
-						name="Days to Decision"
+						name="Days to respond"
 						:rules="{ required: true, min: 0, max: 365 }"
 						v-slot="validationContext"
 					>
@@ -124,7 +124,7 @@
 								min="0"
 								max="365"
 								default="daysToDecision"
-								v-model="daysToDecision"
+								v-model="selectedDaysToDecision"
 								:disabled="saving"
 								:state="getValidationState(validationContext)"
 								required="required"
@@ -805,6 +805,7 @@ export default {
 			insurance:null,
 			agency_autofill:null,
 			daysToRespond:[],
+			daysToDecision:[],
 			insuranceData:[],
 			// daysToRespond: null,
 			gracedays: null
@@ -822,6 +823,19 @@ export default {
       // letter date
       return moment(this.entity.letter_date).add(this.daysToRespond, 'days').add(this.gracedays, 'days').format('YYYY-MM-DD')
     }
+  },
+  selectedDaysToDecision() {
+    if (!this.entity.appeal_level_id) return null;
+    
+    const selectedLevel = this.insuranceData.find(level => {
+      return level.id === this.entity.appeal_level_id;
+    });
+	console.log("radio", this.daysToRespondFroms);
+	console.log('days to respond:', selectedLevel.days_to_decision);
+    console.log('Selected level:', selectedLevel);
+	this.daysToDecision = selectedLevel.days_to_decision;
+	console.log("final",this.daysToDecision);
+	return(this.daysToDecision);
   },
 
 		selectedDaysToRespond() {
