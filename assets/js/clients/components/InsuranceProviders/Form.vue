@@ -339,19 +339,28 @@
 													v-slot="validationContext"
 												>
 													<b-form-group
-														label="Decision Options"
+														label="Decision Options1"
 														label-for="decision_options"
 														label-cols-lg="4"
 														description="Select the decision type"
 													>
-													<b-form-radio-group
+													<b-form-select
 														name="decision_options"
 														v-model="appealLevel._joinData.decision_options"
 														:options="decisionTypeOptions"
 														:disabled="saving"
 														:state="getValidationState(validationContext)"
 														required="required"
-													/>
+														/>
+													<!-- <b-form-radio-group
+														name="decision_options"
+														v-model="appealLevel._joinData.decision_options"
+														:options="decisionTypeOptions"
+														:disabled="saving"
+														:state="getValidationState(validationContext)"
+														required="required"
+													
+													/> -->
 														<b-form-invalid-feedback
 															v-for="error in validationContext.errors"
 															:key="error"
@@ -880,13 +889,14 @@ export default {
 			this.loading = false;
 		}
 	this.additionalData();
-		this.test();
+		// this.test();
 	
 	},
 	methods: {
 		test(){
 			console.log("ID =",this.entity.id);
 			console.log("ID Direct", this.id);
+			console.log("Entityed =", this.entity);
 		},
 
 	async additionalData(){
@@ -1009,6 +1019,7 @@ export default {
 				this.saving = false;
 				this.$store.dispatch("insuranceProviders/getActive");
 				this.$store.dispatch("insuranceProviders/getAll");
+				this.test();
 			}
 		},
 		addAppealLevel() {
