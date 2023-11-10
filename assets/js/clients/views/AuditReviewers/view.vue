@@ -62,7 +62,7 @@
 
 			<b-card no-body class="shadow-sm">
 				<b-tabs card active-nav-item-class="font-weight-bold">
-					<b-tab lazy>
+					<b-tab no-body active lazy>
 						<template #title>Details</template>
 						<b-row>
 							<b-col cols="12" lg="6" class="mb-2">
@@ -128,7 +128,7 @@
 							</b-col>
 						</b-row>
 					</b-tab>
-					<b-tab no-body active lazy>
+					<b-tab no-body  lazy>
 						<template #title>Appeals</template>
 						<appeal-index
 							:filters="appealFilters"
