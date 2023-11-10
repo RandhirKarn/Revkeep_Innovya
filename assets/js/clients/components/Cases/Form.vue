@@ -641,7 +641,7 @@
 										<b-form-input
 											name="insurance_plan"
 											type="text"
-											v-model="entity.insurance_plan"
+											v-model="entity.icdCodes10"
 											:disabled="saving"
 											:state="getValidationState(validationContext)"
 										/>
@@ -668,7 +668,7 @@
 										<b-form-input
 											name="insurance_number"
 											type="text"
-											v-model="entity.insurance_number"
+											v-model="entity.cptCodes"
 											:disabled="saving"
 											:state="getValidationState(validationContext)"
 										/>
@@ -694,7 +694,7 @@
 										<b-form-input
 											name="insurance_number"
 											type="text"
-											v-model="entity.insurance_number"
+											v-model="entity.icdCodes"
 											:disabled="saving"
 											:state="getValidationState(validationContext)"
 										/>
@@ -771,7 +771,7 @@
 										<b-form-input
 											name="insurance_plan"
 											type="text"
-											v-model="entity.insurance_plan"
+											v-model="entity.carcs"
 											:disabled="saving"
 											:state="getValidationState(validationContext)"
 										/>
@@ -797,7 +797,7 @@
 										<b-form-input
 											name="insurance_number"
 											type="text"
-											v-model="entity.insurance_number"
+											v-model="entity.rarcs"
 											:disabled="saving"
 											:state="getValidationState(validationContext)"
 										/>
@@ -1061,7 +1061,7 @@
 										<b-form-input
 											name="insurance_number"
 											type="text"
-											v-model="entity.insurance_number"
+											v-model="entity.planID"
 											:disabled="saving"
 											:state="getValidationState(validationContext)"
 										/>
@@ -1384,6 +1384,14 @@ export default {
 				unable_to_complete: false,
 				assigned: null,
 				assigned_to: null,
+				cptCodes:null,
+				icdCodes:null,
+				carcs:null,
+				rarcs:null,
+				planID:null,
+				icdCodes10:null,
+
+
 			},
 			currentDenialReasons: [],
 			addingDenialReason: false,
