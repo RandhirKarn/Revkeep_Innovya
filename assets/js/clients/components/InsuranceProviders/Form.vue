@@ -339,7 +339,7 @@
 													v-slot="validationContext"
 												>
 													<b-form-group
-														label="Decision Options1"
+														label="Decision Options"
 														label-for="decision_options"
 														label-cols-lg="4"
 														description="Select the decision type"
