@@ -1,7 +1,7 @@
 <template>
 	<loading-indicator v-if="loading" class="my-5" title="Fetching physician..." />
 	<validation-observer v-else v-bind="$attrs" ref="observer" v-slot="{ invalid }">
-		<b-form @submit.prevent="save">
+		<b-form @submit.prevent="save" >
 			<b-card no-body>
 				<slot name="header"></slot>
 

@@ -55,33 +55,76 @@ class ClientEmployeesController extends ApiController
 	 * @return void
 	 * @throws \Cake\ORM\Exception\PersistenceFailedException When not valid.
 	 */
-	public function add(): void
-	{
-		$entity = $this->ClientEmployees->newEntity($this->getRequest()->getData(), [
-			'fields' => [
-				'active',
-				'first_name',
-				'last_name',
-				'facility_id',
-				'npi_number',
-				'state',
-				'title',
-				'email',
-				'mobile_phone',
-				'work_phone'
-			],
-			'associated' => [],
-		]);
+	// public function add(): void
+	// {
+	// 	$entity = $this->ClientEmployees->newEntity($this->getRequest()->getData(), [
+	// 		'fields' => [
+	// 			'active',
+	// 			'first_name',
+	// 			'last_name',
+	// 			'facility_id',
+	// 			'npi_number',
+	// 			'state',
+	// 			'title',
+	// 			'email',
+	// 			'mobile_phone',
+	// 			'work_phone'
+	// 		],
+	// 		'associated' => [],
+	// 	]);
 
-		try {
-			$this->ClientEmployees->saveOrFail($entity);
-			$entity = $this->ClientEmployees->getFull($entity->id);
-			$this->set('data', $entity);
-		} catch (PersistenceFailedException $e) {
-			$this->Log->saveFailed($e, $entity);
-			$this->setResponse($this->ApiError->entity($e, $entity));
-		}
-	}
+	// 	try {
+	// 		$this->ClientEmployees->saveOrFail($entity);
+	// 		$entity = $this->ClientEmployees->getFull($entity->id);
+	// 		$this->set('data', $entity);
+	// 	} catch (PersistenceFailedException $e) {
+	// 		$this->Log->saveFailed($e, $entity);
+	// 		$this->setResponse($this->ApiError->entity($e, $entity));
+	// 	}
+	// }
+	public function add(): void
+{
+    $npiNumber = $this->getRequest()->getData('npi_number');
+    
+    $existingEntity = $this->ClientEmployees
+        ->find()
+        ->where(['npi_number' => $npiNumber])
+        ->first();
+
+    if ($existingEntity) {
+        $this->setResponse([
+            'error' => 'NPI number already exists in the database',
+            'existing_entity' => $existingEntity
+        ]);
+        return;
+    }
+
+    $entity = $this->ClientEmployees->newEntity($this->getRequest()->getData(), [
+        'fields' => [
+            'active',
+            'first_name',
+            'last_name',
+            'facility_id',
+            'npi_number',
+            'state',
+            'title',
+            'email',
+            'mobile_phone',
+            'work_phone'
+        ],
+        'associated' => [],
+    ]);
+
+    try {
+        $this->ClientEmployees->saveOrFail($entity);
+        $entity = $this->ClientEmployees->getFull($entity->id);
+        $this->set('data', $entity);
+    } catch (PersistenceFailedException $e) {
+        $this->Log->saveFailed($e, $entity);
+        $this->setResponse($this->ApiError->entity($e, $entity));
+    }
+}
+
 
 	/**
 	 * View method

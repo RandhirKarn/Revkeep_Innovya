@@ -1,4 +1,7 @@
 <template>
+	<div>
+	<div  v-if="loading">Loading</div>
+	<div v-else>
 	<DataTable v-bind="{ fields, sortAliases, ...$attrs }" v-on="$listeners" @sorted.once="sorted">
 		<template v-slot:[`cell(status)`]="{ value, item }">
 			<div v-if="value && item">
@@ -37,7 +40,7 @@
 		</template>
 
 		<template v-slot:[`cell(appeals)`]="{ value }">
-			<div v-if="value && value.length > 0" class="w-10 text-truncate">
+			<!-- <div v-if="value && value.length > 0" class="w-10 text-truncate">
 				{{
 					value
 						.map((item) => {
@@ -50,7 +53,10 @@
 						.join(", ")
 				}}
 			</div>
-			<div v-else class="text-muted">&mdash;</div>
+			<div v-else class="text-muted">&mdash;</div> -->
+			<div  class="w-10 text-truncate">
+				{{  checkAppealLevelName(value) }}  
+			</div>
 		</template>
 
 		<template v-slot:[`cell(disciplines)`]="{ value }">
@@ -138,12 +144,15 @@
 			<div v-else class="text-muted">&mdash;</div>
 		</template>
 	</DataTable>
+	</div>
+	</div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
 import DataTable from "@/clients/components/Layout/data-table.vue";
 import CaseStatusLabel from "@/clients/components/Cases/StatusLabel.vue";
+import axios from "axios";
 
 export default {
 	name: "CaseTable",
@@ -177,6 +186,25 @@ export default {
 			default: true,
 		},
 	},
+	data() {
+		return {
+			loading: true,
+      responseData: null,
+
+		}
+
+	},
+	async created() {
+    try {
+      const response = await axios.get('/client/insuranceappeal');
+      this.responseData = response.data;
+	  console.log('RESPONSE =', this.responseData);
+    } catch (error) {
+      console.error('Error:', error);
+    } finally {
+      this.loading = false; // Set loading to false when the request is completed
+    }
+  },
 	computed: {
 		fields() {
 			return [
@@ -264,12 +292,61 @@ export default {
 			sortAliases: "cases/sortAliases",
 		}),
 	},
+	// mounted() {
+		
+	// 	this.test();
+
+		
+	// },
 	methods: {
 		sorted(params) {
 			this.$emit("update:sort", params.sort);
 			this.$emit("update:sort-descending", params.sortDescending);
 			this.$emit("sorted", params);
 		},
+
+		// async test(){
+		// 	let name ="";
+		// 	const url = "/client/insuranceappeal";
+				
+		// 		const response = await axios.get(url, {
+		// 		headers: {
+		// 			"Accept": "application/json",
+		// 			// You can add other headers here if needed
+		// 		},
+		// 		});
+		// 		console.log("Response =", response);
+		// 		this.outgoingList = response.data;
+
+		// 	console.log('Outputed =', this.value);
+
+		// 	this.outgoingList.forEach((item, index)=> {
+		// 		this.value.forEach((appealInfo , j )=>{
+		// 			if(item.id == appealInfo.insurance_appeal_id){
+		// 				console.log("Match Found =", item.label)
+		// 				name += item.label + ", ";
+		// 			}
+		// 		});
+		// 	});
+		// 	this.generatedName = name
+		// 	console.log("Name final =", this.generatedName);
+		// },
+
+		 checkAppealLevelName(value) {
+			
+			console.log("valued = ", value);
+			let name="";
+			value.forEach((item,index)=>{
+				this.responseData.forEach((data)=>{
+					if(item.insurance_appeal_id==data.id){
+						console.log("Match founded =", data.label);
+						name+=data.label+", ";
+					}
+				});
+			});
+			return name;
+		},
+
 	},
 };
 </script>

@@ -76,7 +76,7 @@ echo $this->Form->create($form, [
 									'type' => 'text',
 									'label' => __('Middle Name'),
 									'class' => 'form-control py-3',
-									'required' => true,
+									'required' => false,
 									'default' => null,
 									'autofocus' => true
 								]

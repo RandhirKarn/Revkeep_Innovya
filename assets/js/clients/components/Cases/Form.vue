@@ -335,7 +335,7 @@
 									<b-form-select
 										name="case_type_id"
 										v-model="entity.case_type_id"
-										:options="caseTypes"
+										:options="insuranceTypesList"
 										:disabled="saving || loadingCaseTypes"
 										:state="getValidationState(validationContext)"
 										value-field="id"
@@ -641,7 +641,7 @@
 										<b-form-input
 											name="insurance_plan"
 											type="text"
-											v-model="entity.insurance_plan"
+											v-model="entity.icdCodes10"
 											:disabled="saving"
 											:state="getValidationState(validationContext)"
 										/>
@@ -668,7 +668,7 @@
 										<b-form-input
 											name="insurance_number"
 											type="text"
-											v-model="entity.insurance_number"
+											v-model="entity.cptCodes"
 											:disabled="saving"
 											:state="getValidationState(validationContext)"
 										/>
@@ -694,7 +694,7 @@
 										<b-form-input
 											name="insurance_number"
 											type="text"
-											v-model="entity.insurance_number"
+											v-model="entity.icdCodes"
 											:disabled="saving"
 											:state="getValidationState(validationContext)"
 										/>
@@ -771,7 +771,7 @@
 										<b-form-input
 											name="insurance_plan"
 											type="text"
-											v-model="entity.insurance_plan"
+											v-model="entity.carcs"
 											:disabled="saving"
 											:state="getValidationState(validationContext)"
 										/>
@@ -797,7 +797,7 @@
 										<b-form-input
 											name="insurance_number"
 											type="text"
-											v-model="entity.insurance_number"
+											v-model="entity.rarcs"
 											:disabled="saving"
 											:state="getValidationState(validationContext)"
 										/>
@@ -1061,7 +1061,7 @@
 										<b-form-input
 											name="insurance_number"
 											type="text"
-											v-model="entity.insurance_number"
+											v-model="entity.planID"
 											:disabled="saving"
 											:state="getValidationState(validationContext)"
 										/>
@@ -1294,6 +1294,7 @@ import DenialReasonSearchMulti from "@/clients/components/Search/DenialReasonsMu
 import DenialReasonForm from "@/clients/components/DenialReasons/Form.vue";
 import ClientEmployeeForm from "@/clients/components/ClientEmployees/Form.vue";
 import FacilityForm from "@/clients/components/Facilities/AddForm.vue";
+import axios from "axios";
 
 export default {
 	name: "CaseForm",
@@ -1383,12 +1384,21 @@ export default {
 				unable_to_complete: false,
 				assigned: null,
 				assigned_to: null,
+				cptCodes:null,
+				icdCodes:null,
+				carcs:null,
+				rarcs:null,
+				planID:null,
+				icdCodes10:null,
+
+
 			},
 			currentDenialReasons: [],
 			addingDenialReason: false,
 			minDate: getAbsoluteMinimumDate(),
 			maxDate: getTodaysDate(),
 			disciplineIds: [],
+			insuranceTypesList:[],
 		};
 	},
 	computed: {
@@ -1445,6 +1455,9 @@ export default {
 		}),
 	},
 	mounted() {
+		this.additionalDataFetch();
+
+
 		if (this.id) {
 			this.refresh();
 		} else {
@@ -1654,6 +1667,20 @@ export default {
 			this.addingFacility = false;
 			this.entity.facility_id = facility.id;
 			this.$store.dispatch("facilities/getActive");
+		},
+
+		async additionalDataFetch(){
+			const url = "/client/insuranceTypesList";
+				
+			const response = await axios.get(url, {
+			headers: {
+				"Accept": "application/json",
+				// You can add other headers here if needed
+			},
+			});
+			console.log("insuranceTypesList = ", response.data);
+			this.insuranceTypesList=response.data;
+
 		},
 	},
 	watch: {

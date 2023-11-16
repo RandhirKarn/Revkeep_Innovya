@@ -191,11 +191,12 @@
 															</span>
 														</h5>
 														<p class="mb-0">
-															<span v-if="result?.appeal_level?.name">
-																{{ result.appeal_level.name }}
+															<!-- <span v-if="result?.appeal_level?.name">
+																{{ result.appeal_level.name }} {{ checkAppealLevelName(result) }}
 															</span>
-															<span v-else class="text-danger"> Missing Level </span>
+															<span v-else class="text-danger"> Missing Level </span> -->
 
+															<span > {{ checkAppealLevelName(result) }} </span>
 															<appeal-status-label pill :value="result" />
 														</p>
 														<p
@@ -732,6 +733,7 @@ export default {
 	},
 	mounted() {
 		this.refresh();
+		// this.test();
 	},
 	methods: {
 		async refresh() {
@@ -758,6 +760,12 @@ export default {
 					id: caseEntity.id,
 				},
 			});
+		},
+		test(){
+			console.log('Test = ', this.results);
+		},
+		checkAppealLevelName(result){
+			console.log('RESULTS =', result);
 		},
 	},
 	destroyed() {

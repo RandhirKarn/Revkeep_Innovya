@@ -1,5 +1,5 @@
 <template>
-	<b-card no-body v-bind="$attrs">
+	<b-card  no-body v-bind="$attrs">
 		<b-card-header>
 			<b-row class="d-flex align-items-center">
 				<b-col cols="9" sm="8" lg="9" class="mb-0">
@@ -53,7 +53,7 @@
 									fixed-width
 								/>
 								<span v-if="value.delivery_method && value.delivery_method_label" class="mb-0">
-									{{ value.delivery_method_label }}
+									{{ value.delivery_method }}
 								</span>
 							</p>
 							<div v-if="!hideAgency">
@@ -69,7 +69,7 @@
 									title="No Agency Provided"
 								>
 									<font-awesome-icon icon="building" fixed-width />
-									<span class="mb-0">No Agency</span>
+									<span class="mb-0">{{ agencyName }}</span>
 								</p>
 							</div>
 						</b-col>
@@ -120,6 +120,7 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
 	name: "OutgoingDocumentListItem",
 	props: {
@@ -176,12 +177,50 @@ export default {
 			default: false,
 		},
 	},
+	data() 
+	{
+
+		return {
+		outgoingList:[],
+		appealLevelName:'',
+		appealList:[],
+		agencyList:[],
+		agencyName:null,
+
+		};
+	},
 	computed: {
 		patientName() {
+			console.log("value =", this.value);
+			
 			return this.value.case?.patient?.full_name ?? "(Missing Name)";
 		},
 		appealLevel() {
-			return this.value.appeal?.appeal_level?.name ?? "(Missing Level)";
+			this.outgoingList.forEach((item, index)=>{
+				try{
+				if(item.id ==this.value.appeal.insurance_appeal_id){
+					console.log("match found =", item.label);
+					this.appealLevelName = item.label;
+				}
+				}
+				catch (err) {
+					console.log(err);
+				}
+			});
+			// return this.value.appeal?.appeal_level?.name ?? "(Missing Level)";
+			//below code for rendering agency 
+			this.appealList.forEach((item, index)=>{
+				if(this.value.appeal_id == item.id){
+					this.agencyList.forEach((agency , indexAgency ) => {
+						if(item.agency_id == agency.id){
+							this.agencyName = agency.name;
+							console.log("Agency found =", agency.name);
+						}
+					});
+				}
+			});
+
+			return this.appealLevelName;
 		},
 		isDelivered() {
 			return this.value.status_message == "DELIVERED";
@@ -235,6 +274,42 @@ export default {
 				id: this.value.id,
 			});
 		},
+		async test(){
+			const url = "/client/insuranceappeal";
+				
+				const response = await axios.get(url, {
+				headers: {
+					"Accept": "application/json",
+					// You can add other headers here if needed
+				},
+				});
+				console.log("Response =", response);
+				this.outgoingList = response.data;
+			
+			const appealListUrl = '/client/appealList';
+			const appealListResponse = await axios.get(appealListUrl, {
+				headers: {
+					"Accept": "application/json",
+					// You can add other headers here if needed
+				},
+				});
+				console.log("Appeal Response =", appealListResponse);
+				this.appealList = appealListResponse.data;
+
+				const agencyListUrl = '/client/agencyList';
+			const agencyListResponse = await axios.get(agencyListUrl, {
+				headers: {
+					"Accept": "application/json",
+					// You can add other headers here if needed
+				},
+				});
+				console.log("Agency Response =", agencyListResponse);
+				this.agencyList = agencyListResponse.data;
+				
+		}
 	},
+	mounted() {
+		this.test();
+	}
 };
 </script>

@@ -182,8 +182,8 @@
 					</b-col>
 				</b-row>
 
-				<b-nav card-header tabs>
-					<b-nav-item
+				<b-nav card-header tabs >
+					<b-nav-item 
 						title="Case Details"
 						exact
 						active-class="active font-weight-bold"
@@ -194,7 +194,7 @@
 						<b-badge v-if="caseEntity.unable_to_complete" pill variant="warning" title="Unable To Complete">
 							<font-awesome-icon icon="exclamation-triangle" class="mx-0 px-0" />
 						</b-badge>
-						<span>Case</span>
+						<span >Case</span>
 					</b-nav-item>
 
 					<b-nav-item
@@ -224,11 +224,14 @@
 						active-class="active font-weight-bold"
 					>
 						<appeal-status-label icon :value="appeal" class="d-none d-lg-inline mr-2" />
-						<span
+						<!-- <span
 							v-if="appeal.appeal_level && appeal.appeal_level.short_name"
-							v-text="appeal.appeal_level.short_name"
+							v-text="checkAppealName(appeal)"
 						/>
-						<span v-else class="text-danger">(Missing Level)</span>
+						<span v-else class="text-danger">(Missing Level)test1</span> -->
+						<span
+							v-text="checkAppealName(caseEntity , appeal)"
+						/>
 					</b-nav-item>
 				</b-nav>
 			</b-card-header>
@@ -265,6 +268,7 @@ import CaseActivity from "@/clients/components/Cases/Activity.vue";
 import CloseCaseModal from "@/clients/components/Cases/CloseCaseModal.vue";
 import CaseRequestStatusLabel from "@/clients/components/CaseRequests/StatusLabel.vue";
 import CaseStatusLabel from "@/clients/components/Cases/StatusLabel.vue";
+import axios from "axios";
 
 export default {
 	name: "CaseView",
@@ -318,8 +322,13 @@ export default {
 				appeals: [],
 				disciplines: [],
 				case_requests: [],
+				
+
 			},
 			timer: null,
+			outgoingList:null,
+			appealList:null,
+			name:null,
 		};
 	},
 	computed: {
@@ -364,6 +373,7 @@ export default {
 	},
 	mounted() {
 		this.refresh();
+		// this.test();
 
 		//this.timer = setInterval(this.refresh, 30000);
 	},
@@ -480,6 +490,59 @@ export default {
 		deletedRequest(request) {
 			this.refresh();
 		},
+		async test(){
+			const url = "/client/insuranceappeal";
+				
+				const response = await axios.get(url, {
+				headers: {
+					"Accept": "application/json",
+					// You can add other headers here if needed
+				},
+				});
+				console.log("Response =", response);
+				this.outgoingList = response.data;
+			
+			const appealListUrl = '/client/appealList';
+			const appealListResponse = await axios.get(appealListUrl, {
+				headers: {
+					"Accept": "application/json",
+					// You can add other headers here if needed
+				},
+				});
+				console.log("Appeal Response =", appealListResponse);
+				this.appealList = appealListResponse.data;
+
+			// 	const agencyListUrl = '/client/agencyList';
+			// const agencyListResponse = await axios.get(agencyListUrl, {
+			// 	headers: {
+			// 		"Accept": "application/json",
+			// 		// You can add other headers here if needed
+			// 	},
+			// 	});
+			// 	console.log("Agency Response =", agencyListResponse);
+			// 	this.agencyList = agencyListResponse.data;
+				
+		},
+		checkAppealName(caseEntity , appeal){
+			// this.test();
+			
+			console.log("case testing = ",caseEntity);
+			console.log("appeal testing = ",appeal);
+			let name ="";
+			caseEntity.insurance_provider.appeal_levels.map((item , index)=>{
+				console.log("inside loop")
+				if(appeal.insurance_appeal_id == item._joinData.id){
+					console.log("match found =", item._joinData.label)
+					name = item._joinData.label;
+					
+				}
+			});
+			
+
+			// return this.name;
+			return name;
+			
+		}
 	},
 	destroyed() {
 		clearInterval(this.timer);

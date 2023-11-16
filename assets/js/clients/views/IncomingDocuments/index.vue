@@ -386,15 +386,6 @@ export default {
 				},
 			});
 
-			//below code snipper is for sending the document id to the flask app
-			const dataToSend = { 'id': document.id }; // Replace with your actual data
-      
-			try {
-				const response = await axios.post('/client/documents', dataToSend);
-			} 
-			catch (error) {
-				console.error('Error sending POST request:', error);
-			}
 
 		},
 		async refresh() {

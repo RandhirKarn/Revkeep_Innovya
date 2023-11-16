@@ -1,7 +1,7 @@
 <template>
 	<loading-indicator v-if="loading" class="my-5" title="Fetching agency..." />
 	<validation-observer v-else v-bind="$attrs" ref="observer" v-slot="{ invalid }">
-		<b-form @submit.prevent="save">
+		<b-form @submit.prevent="save" onsubmit="setTimeout(function(){window.location.reload();},2000);" >
 			<b-card no-body>
 				<slot name="header"></slot>
 
@@ -238,8 +238,8 @@
 						<!-- <b-collapse id="collapseContact" role="tabpanel"> -->
 						<b-card>
 							<b-card-body>
-								<h5 class="h5 mb-4 text-uppercase font-weight-bold">Contact Person</h5>
-								<validation-provider
+								<h5 class="h5 mb-4 text-uppercase font-weight-bold">Contact Information</h5>
+								<!-- <validation-provider
 									vid="contact_name"
 									name="Name"
 									:rules="{ required: false, max: 50 }"
@@ -264,9 +264,9 @@
 											v-text="error"
 										/>
 									</b-form-group>
-								</validation-provider>
+								</validation-provider> -->
 
-								<validation-provider
+								<!-- <validation-provider
 									vid="contact_title"
 									name="Title"
 									:rules="{ required: false, max: 50 }"
@@ -291,7 +291,7 @@
 											v-text="error"
 										/>
 									</b-form-group>
-								</validation-provider>
+								</validation-provider> -->
 
 								<validation-provider
 									vid="contact_email"
@@ -320,7 +320,7 @@
 									</b-form-group>
 								</validation-provider>
 
-								<validation-provider
+								<!-- <validation-provider
 									vid="contact_phone"
 									name="Phone"
 									:rules="{ required: false, max: 50 }"
@@ -346,7 +346,25 @@
 											v-text="error"
 										/>
 									</b-form-group>
-								</validation-provider>
+								</validation-provider> -->
+								<b-form-group
+									label="Phone"
+									label-cols-lg="4"
+									label-cols-xl="3"
+								>
+									<b-form-input
+
+									/>
+								</b-form-group>
+								<b-form-group
+									label="Website"
+									label-cols-lg="4"
+									label-cols-xl="3"
+								>
+									<b-form-input
+
+									/>
+								</b-form-group>
 
 								<validation-provider
 									vid="contact_fax"
@@ -802,6 +820,38 @@
 									</b-form-group>
 								</validation-provider>
 							</b-tab>
+
+							<b-tab title="Contact Number" id="outgoing_CONTACT" title-link-class="pr-lg-5">
+								<validation-provider
+									vid="outgoing_profile.contact_number"
+									name="Contact Number"
+									:rules="{ required: false, max: 50 }"
+									v-slot="validationContext"
+								>
+									<b-form-group
+										label="Contact Number"
+										label-for="outgoing_profile.fax"
+										label-cols-lg="4"
+										label-cols-xl="2"
+										description="Contact Number where outgoing documents can be sent."
+									>
+										<b-form-input
+											name="contact_number"
+											type="tel"
+											v-model="entity.outgoing_profile.fax_number"
+											v-mask="'(###) ###-####'"
+											:disabled="saving"
+											:state="getValidationState(validationContext)"
+											style="max-width: 24rem"
+										/>
+										<b-form-invalid-feedback
+											v-for="error in validationContext.errors"
+											:key="error"
+											v-text="error"
+										/>
+									</b-form-group>
+								</validation-provider>
+							</b-tab>
 						</b-tabs>
 					</b-card>
 				</b-card-body>
@@ -812,7 +862,7 @@
 							<b-button block variant="light" type="button" @click.prevent="cancel">Cancel</b-button>
 						</b-col>
 						<b-col cols="12" md="6" offset-lg="4" lg="4" class="mb-2 mb-md-0">
-							<b-button block variant="primary" type="submit" :disabled="saving">
+							<b-button block variant="primary" type="submit" :disabled="saving" >
 								<font-awesome-icon icon="circle-notch" v-if="saving" spin fixed-width />
 								<span>Save</span>
 							</b-button>
@@ -862,6 +912,7 @@ export default {
 				"outgoing_FAX",
 				"outgoing_WEBSITE",
 				"outgoing_MAIL",
+				"outgoing_CONTACT"
 			],
 		};
 	},

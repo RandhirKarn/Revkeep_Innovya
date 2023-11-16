@@ -16,7 +16,6 @@ export default {
 			return await Service.generate(params.id, params);
 		},
 		async submit({ commit, dispatch }, params) {
-			alert('inside appealPackets.js async submit method')
 			return await Service.submit(params.id, params);
 		},
 	},

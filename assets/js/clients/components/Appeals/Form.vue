@@ -30,7 +30,7 @@
 						</b-form-group> 
 					</validation-provider> -->
 
-					<validation-provider
+					<!-- <validation-provider
 						vid="appeal_level_id"
 						name="Appeal Level"
 						:rules="{ required: true }"
@@ -44,7 +44,7 @@
 								:state="getValidationState(validationContext)"
 								name="appeal_level_id"
 								value-field="id"
-      							text-field="label"
+      							text-field="id"
 								required="required"
 								
 							/>
@@ -54,7 +54,12 @@
 								v-text="error"
 							/>
 						</b-form-group>
-					</validation-provider>
+					</validation-provider> -->
+
+					<b-form-group label="Level" label-cols-lg="4">
+						<b-form-select v-model="entity.appeal_level_id" :options="insuranceData" value-field="id" text-field="label"></b-form-select>
+					</b-form-group>
+						
 
 					<validation-provider
 						vid="letter_date"
@@ -106,8 +111,8 @@
 						</b-form-group>
 					</validation-provider>
 					<validation-provider
-						vid="days_to_respond"
-						name="Days to respond"
+						vid="days_to_decision"
+						name="Days to Decision"
 						:rules="{ required: true, min: 0, max: 365 }"
 						v-slot="validationContext"
 					>
@@ -119,7 +124,7 @@
 								min="0"
 								max="365"
 								default="daysToDecision"
-								v-model="daysToDecision"
+								v-model="selectedDaysToDecision"
 								:disabled="saving"
 								:state="getValidationState(validationContext)"
 								required="required"
@@ -800,8 +805,9 @@ export default {
 			insurance:null,
 			agency_autofill:null,
 			daysToRespond:[],
+			daysToDecision:[],
 			insuranceData:[],
-			daysToRespond: null,
+			// daysToRespond: null,
 			gracedays: null
 			// selectedDaysToRespond: []
 		};
@@ -817,6 +823,19 @@ export default {
       // letter date
       return moment(this.entity.letter_date).add(this.daysToRespond, 'days').add(this.gracedays, 'days').format('YYYY-MM-DD')
     }
+  },
+  selectedDaysToDecision() {
+    if (!this.entity.appeal_level_id) return null;
+    
+    const selectedLevel = this.insuranceData.find(level => {
+      return level.id === this.entity.appeal_level_id;
+    });
+	console.log("radio", this.daysToRespondFroms);
+	console.log('days to respond:', selectedLevel.days_to_decision);
+    console.log('Selected level:', selectedLevel);
+	this.daysToDecision = selectedLevel.days_to_decision;
+	console.log("final",this.daysToDecision);
+	return(this.daysToDecision);
   },
 
 		selectedDaysToRespond() {
@@ -980,6 +999,7 @@ export default {
 					appeal_type_id: this.entity.appeal_type_id,
 					// appeal_level_id: this.entity.appeal_level_id,
 					appeal_level_id: null,
+					insurance_appeal_id:this.entity.appeal_level_id,
 					days_to_respond: this.entity.days_to_respond,
 					days_to_respond_from_id: this.entity.days_to_respond_from_id,
 					letter_date: this.entity.letter_date,
@@ -1127,7 +1147,7 @@ export default {
 				if(item.insurance_provider_id==this.caseEntity.insurance_provider_id){
 					console.log("match found = ", item);
 					let ids = parseInt(item.id, 10);
-					this.insuranceData.push({label:item.label, id:ids , count:count , days_to_respond: item.days_to_respond, Grace_days: item.Grace_days});
+					this.insuranceData.push({label:item.label, id:ids , count:count , days_to_respond: item.days_to_respond, Grace_days: item.Grace_days, days_to_decision: item.max_days});
 					count ++;
 				}
 				});
@@ -1161,12 +1181,10 @@ export default {
 		}
 
 	},
-	// watch: {
-	// 	dueDate: function (newVal) {
-	// 		if (newVal) {
-	// 			this.entity.due_date = newVal;
-	// 		}
-	// 	},
-	// },
+	watch: {
+		'entity.appeal_level_id': function(newValue, oldValue) {
+      console.log('Selected Option:', newValue);
+		}
+	},
 };
 </script>

@@ -86,7 +86,7 @@ class AppealsController extends ApiController
 			'modified',
 			'unable_to_complete',
 			'audit_identifier',
-			// Associations
+			// Associations,
 			'Agencies.name',
 			'AppealTypes.name',
 			'Cases.id',
