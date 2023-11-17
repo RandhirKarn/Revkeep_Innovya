@@ -54,11 +54,11 @@
 
 			<b-card no-body class="shadow-sm">
 				<b-tabs card active-nav-item-class="font-weight-bold">
-					<b-tab>
+					<b-tab  no-body active lazy>
 						<template #title>Details</template>
 
-						<div class="row">
-							<dt class="col-4 text-muted h6 small">Facility</dt>
+						<div class="row mt-4">
+							<dt class="col text-muted h6 small ml-3">Facility</dt>
 							<dd class="col-8">
 								<span v-if="entity.facility && entity.facility.name">
 									<router-link
@@ -76,8 +76,8 @@
 							</dd>
 						</div>
 
-						<div class="row">
-							<dt class="col-4 text-muted h6 small">NPI Number</dt>
+						<div class="row ">
+							<dt class="col text-muted h6 small ml-3">NPI Number</dt>
 							<dd class="col-8">
 								<span v-if="entity.npi_number"> {{ entity.npi_number }} </span>
 								<span v-else class="text-muted"> &mdash; </span>
@@ -85,7 +85,7 @@
 						</div>
 
 						<div class="row">
-							<dt class="col-4 text-muted h6 small">Work Phone</dt>
+							<dt class="col text-muted h6 small ml-3">Work Phone</dt>
 							<dd class="col-8">
 								<span v-if="entity.work_phone"> {{ entity.work_phone }} </span>
 								<span v-else class="text-muted"> &mdash; </span>
@@ -93,7 +93,7 @@
 						</div>
 
 						<div class="row">
-							<dt class="col-4 text-muted h6 small">Mobile Phone</dt>
+							<dt class="col text-muted h6 small ml-3">Mobile Phone</dt>
 							<dd class="col-8">
 								<span v-if="entity.mobile_phone"> {{ entity.mobile_phone }} </span>
 								<span v-else class="text-muted"> &mdash; </span>
@@ -101,15 +101,15 @@
 						</div>
 
 						<div class="row">
-							<dt class="col-4 text-muted h6 small">Email</dt>
+							<dt class="col text-muted h6 small ml-3">Email</dt>
 							<dd class="col-8">
 								<span v-if="entity.email"> {{ entity.email }} </span>
 								<span v-else class="text-muted"> &mdash; </span>
 							</dd>
 						</div>
 
-						<div class="row">
-							<dt class="col-4 text-muted h6 small">Added</dt>
+						<div class="row pb-3">
+							<dt class="col text-muted h6 small ml-3">Added</dt>
 							<dd class="col-8">
 								<span v-if="entity.created">
 									{{ $filters.fromNow(entity.created) }} on
@@ -119,7 +119,7 @@
 							</dd>
 						</div>
 					</b-tab>
-					<b-tab no-body active lazy>
+					<b-tab no-body  lazy>
 						<template #title>Cases</template>
 						<case-index
 							ref="caseList"
