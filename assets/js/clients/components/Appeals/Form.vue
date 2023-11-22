@@ -265,6 +265,67 @@
 							/>
 						</b-form-group>
 					</validation-provider>
+<validation-provider
+						vid="agency_id"
+						name="Agency"
+						:rules="{ required: false }"
+						v-slot="validationContext"
+					>
+						<b-form-group label="Agency" label-for="agency_id" label-cols-lg="4">
+							<b-input-group>
+								<b-form-select
+									v-model="entity.agency_id"
+									:options="agencies"
+									:disabled="saving || loadingAgencies"
+									:state="getValidationState(validationContext)"
+									name="agency_id"
+									value-field="id"
+									text-field="name"
+									@change="changedAgency"
+								>
+									<template #first>
+										<option :value="null">(None)</option>
+										<option :value="null">-- Not Applicable --</option>
+									</template>
+								</b-form-select>
+								<template #append>
+									<b-button
+										variant="primary"
+										@click="addingAgency = !addingAgency"
+										:active="addingAgency"
+									>
+										<font-awesome-icon icon="plus" fixed-width />
+									</b-button>
+								</template>
+								<b-form-invalid-feedback
+									v-for="error in validationContext.errors"
+									:key="error"
+									v-text="error"
+								/>
+							</b-input-group>
+						</b-form-group>
+					</validation-provider>
+
+					<div v-if="addingAgency" class="mb-4">
+						<agency-form @saved="addedAgency" @cancel="addingAgency = false">
+							<template #header>
+								<b-card-header>
+									<div class="d-flex justify-content-between align-items-center">
+										<span class="font-weight-bold">Add New Agency</span>
+										<b-button
+											variant="secondary"
+											size="sm"
+											@click="addingAgency = false"
+											title="Cancel"
+											class="mb-0"
+										>
+											<font-awesome-icon icon="remove" fixed-width class="my-0 py-0" />
+										</b-button>
+									</div>
+								</b-card-header>
+							</template>
+						</agency-form>
+					</div>
 
 					<validation-provider
 						vid="audit_reviewer_id"
@@ -276,10 +337,10 @@
 							<b-input-group>
 								<b-form-select
 									v-model="entity.audit_reviewer_id"
-									:options="auditReviewers"
+									:options="filteredAuditReviewers"
 									:disabled="saving || loadingAuditReviewers"
 									:state="getValidationState(validationContext)"
-									@change="changedAuditReviewer"
+									
 									name="audit_reviewer_id"
 									value-field="id"
 									text-field="full_name"
@@ -327,7 +388,7 @@
 						</audit-reviewer-form>
 					</div>
 
-					<validation-provider
+					<!-- <validation-provider
 						vid="agency_id"
 						name="Agency"
 						:rules="{ required: false }"
@@ -385,7 +446,7 @@
 								</b-card-header>
 							</template>
 						</agency-form>
-					</div>
+					</div> -->
 
 						<validation-provider
 							vid="insurance_provider_id"
@@ -814,6 +875,7 @@ export default {
 		
 	},
 	computed: {
+
 		dueDate() {
     if (this.entity.days_to_respond_from_id == 1) {
       // received date
@@ -867,6 +929,12 @@ export default {
     
 	
   },
+
+  filteredAuditReviewers() {
+    // Assuming auditReviewers is the array containing all audit reviewers
+    return this.filterAuditReviewersByAgency(this.entity.agency_id);
+  },
+
 		availableAppealLevels() {
 			if (
 				!this.caseEntity ||
@@ -1062,12 +1130,24 @@ export default {
 			this.entity.audit_reviewer_id = auditReviewer.id;
 			this.$store.dispatch("auditReviewers/getActive");
 		},
-		changedAuditReviewer(value) {
-			const auditReviewer = this.auditReviewers.find((ar) => ar.id === value);
-			if (auditReviewer && auditReviewer.id) {
-				this.entity.agency_id = auditReviewer.agency_id ?? null;
-			}
+		filterAuditReviewersByAgency(agencyId) {
+        // Assuming auditReviewers is the array containing all audit reviewers
+        return this.auditReviewers.filter((ar) => ar.agency_id === agencyId);
 		},
+		changedAgency(value) {
+		// Assuming entity is the object representing your form data
+		this.entity.agency_id = value;
+
+		// Filter audit reviewers based on the selected agency
+		this.filteredAuditReviewers = this.filterAuditReviewersByAgency(value);
+		}, 
+
+		// changedAuditReviewer(value) {
+			// 	const auditReviewer = this.auditReviewers.find((ar) => ar.id === value);
+			// 	if (auditReviewer && auditReviewer.id) {
+				// 		this.entity.agency_id = auditReviewer.agency_id ?? null;
+			// 	}
+		// },
 		addedAgency(agency) {
 			this.addingAgency = false;
 			this.entity.agency_id = agency.id;

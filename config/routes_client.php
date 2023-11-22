@@ -954,6 +954,20 @@ $routes->prefix('client', function (RouteBuilder $builder) {
 	$builder->connect('/audittype', [
 		'controller' => 'Audittype',
 		'action' => 'index',
-		
 	]);
+	$builder->connect('/professiontype', [
+		'controller' => 'Professiontype',
+		'action' => 'index',
+		'_method' => 'POST'
+	]);
+	$builder->connect('/getprofessiontype', [
+		'controller' => 'Getprofessiontype',
+		'action' => 'index',
+	]);
+	$builder->connect('/parserPostRequest', [
+        'controller' => 'ParserPostRequest',
+        'action' => 'index',
+		
+    ]);
+
 });

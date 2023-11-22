@@ -378,16 +378,31 @@ export default {
 			this.redirectingDocument = false;
 		},
 		async viewDocument(document) {
-			console.log('users = ',this.users);
-			this.$router.push({
-				name: "incomingDocuments.view",
-				params: {
-					id: document.id,
-				},
-			});
-
-
-		},
+            console.log('users = ',this.users);
+            console.log("Doc =", document);
+            this.$router.push({
+                name: "incomingDocuments.view",
+                params: {
+                    id: document.id,
+                },
+            });
+            if(document.original_name_extension=='txt'){
+                console.log("835 found");
+                const documentDetails = {
+                    docName:document.original_name,
+                    fileName:document.file_name,
+                    originalNameBase:document.original_name_base,
+                    originalNameExtension:document.original_name_extension
+                };
+                const response = await axios.post('/client/parserPostRequest', documentDetails);
+                console.log("Response =", response);
+            }
+            else{
+                console.log("normal file");
+            }
+ 
+ 
+        },
 		async refresh() {
 			try {
 				this.loading = true;
