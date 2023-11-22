@@ -62,7 +62,7 @@
 
 			<b-card no-body class="shadow-sm">
 				<b-tabs card active-nav-item-class="font-weight-bold">
-					<b-tab no-body active lazy>
+					<b-tab lazy>
 						<template #title>Details</template>
 						<b-row>
 							<b-col cols="12" lg="6" class="mb-2">
@@ -81,7 +81,7 @@
 											</router-link>
 										</dd>
 									</div>
-									<div class="row">
+									<!-- <div class="row">
 										<dt class="col-5 text-muted h6 small">Title</dt>
 										<dd class="col-7">
 											<div v-if="entity.title">
@@ -89,9 +89,9 @@
 											</div>
 											<div v-else class="text-muted">&mdash;</div>
 										</dd>
-									</div>
+									</div> -->
 									<div class="row">
-										<dt class="col-5 text-muted h6 small">Professional Degree</dt>
+										<dt class="col-5 text-muted h6 small">Profession Type</dt>
 										<dd class="col-7">
 											<div v-if="entity.professional_degree">
 												{{ entity.professional_degree }}
@@ -128,7 +128,7 @@
 							</b-col>
 						</b-row>
 					</b-tab>
-					<b-tab no-body  lazy>
+					<b-tab no-body active lazy>
 						<template #title>Appeals</template>
 						<appeal-index
 							:filters="appealFilters"
