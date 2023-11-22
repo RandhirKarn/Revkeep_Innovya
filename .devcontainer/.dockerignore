@@ -1,7 +1,0 @@
-.idea
-logs
-tmp
-node_modules
-.artifactignore
-.buildpath
-.phpunit.result.cache

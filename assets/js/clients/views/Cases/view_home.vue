@@ -45,15 +45,15 @@
 					    </b-row>
 					    <b-row class="content-margin">
 						    <b-col cols="6.5" >First Name  &nbsp;  &nbsp;</b-col> 
-						    <b-col cols="5.5" ><p class="value-box">RAYMOND</p></b-col>
+						    <b-col cols="5.5" ><p class="value-box">SANDY</p></b-col>
 					    </b-row>
 					    <b-row class="content-margin">
 						    <b-col cols="6.5" >Middle Name  &nbsp;  &nbsp;</b-col> 
-						    <b-col cols="5.5" ><p class="value-box">W</p></b-col>
+						    <b-col cols="5.5" ><p class="value-box"></p></b-col>
 					    </b-row>
 					    <b-row class="content-margin">
 						    <b-col cols="6.5" >Last Name  &nbsp;  &nbsp;</b-col> 
-						    <b-col cols="5.5" ><p class="value-box">BURCK</p></b-col>
+						    <b-col cols="5.5" ><p class="value-box">DOE</p></b-col>
 					    </b-row>
 					    <b-row class="content-margin">
 						    <b-col cols="6.5" >Contact Number  &nbsp;  &nbsp;</b-col> 
@@ -88,7 +88,7 @@
 					</b-row>
 					<b-row class="content-margin">
 						<b-col cols="6.5" >Payer Name  &nbsp;  &nbsp;</b-col> 
-						<b-col cols="5.5" ><p class="value-box">YOUR TAX DOLLARS AT WORK</p></b-col>
+						<b-col cols="5.5" ><p class="value-box">MEDICARE B</p></b-col>
 					</b-row>
 					
 					<b-row style="margin-bottom: 20px;padding-right: 50px;">

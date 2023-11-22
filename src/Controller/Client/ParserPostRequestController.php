@@ -5,50 +5,33 @@ namespace App\Controller\Client;
 use App\Model\Table\IncomingDocumentsTable;
 use App\Controller\AppController;
 
+use Cake\Http\Exception\MethodNotAllowedException;
+
+
 class ParserPostRequestController extends AppController
 {
     public function index()
     {
-        $this->autoRender = false;
         if ($this->request->is('post')) {
 
+            // Process the data from the POST request
+
             $data = $this->request->getData();
+
+            // $ftp_server = $data["host"];
+            // $ftp_username = $data["username"];
+            // $ftp_password = $data["password"];
+            // $download_dir = "/htdocs/";
+            // $file_names = ["sample.txt","EDI835combined.pdf", "Sam_Smith.pdf", "Sandy_Doe.pdf"]; // Add more file names as needed
             $docName = $data['docName'];
             $fileName = $data['fileName'];
             $originalNameBase = $data['originalNameBase'];
             $originalNameExtension = $data['originalNameExtension'];
-        
-        $file_path = "../storage/incoming-documents/$fileName";
-
-        
-        $url = 'https://api.edination.com/v2/x12/read';
-
-        
-        $api_key = '3ecf6b1c5cf34bd797a5f4c57951a1cf';
-        $headers = [
-            'http' => [
-                'header' => "Ocp-Apim-Subscription-Key: $api_key",
-                'method' => 'POST',
-                'content' => file_get_contents($file_path),
-            ],
-        ];
-        $context = stream_context_create($headers);
-        $response = file_get_contents($url, false, $context);
-
-        if ($response === FALSE) {
-            echo 'Error reading the file or making the request';
-        } else {
-            $json_data = json_decode($response, true);
             
-            $output_file_path = "../storage/$originalNameBase.json";
-
-            file_put_contents($output_file_path, json_encode($json_data, JSON_PRETTY_PRINT));
-
-            echo json_encode($json_data, JSON_PRETTY_PRINT);
-        }
-    }
-    else{
-        echo("Some Problem Occured.");
+            
+            return $this->response->withStatus(201)->withType('application/json');
+        } else {
+           echo("Some Problem Occured.");
         }
     }
 }
