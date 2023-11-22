@@ -3,6 +3,7 @@
 		<b-row>
 			<b-col cols="12">
 				<b-form-textarea
+				    v-if="toggele"
 					v-model="notes"
 					:autofocus="autofocus"
 					:disabled="disabled || saving"
@@ -14,7 +15,7 @@
 					:style="{ minHeight, maxHeight }"
 				/>
 			</b-col>
-			<b-col cols="12" class="text-right">
+			<b-col cols="12" class="text-right"  v-if="toggele">
 				<b-button type="submit" variant="primary" :disabled="empty || disabled || saving" class="px-4">
 					<font-awesome-icon v-if="saving" icon="circle-notch" spin fixed-width />
 					<span v-if="!saving">Save Note</span>
@@ -69,6 +70,7 @@ export default {
 	data() {
 		return {
 			notes: "",
+			toggele:true,
 		};
 	},
 	computed: {
@@ -86,14 +88,23 @@ export default {
 			this.$emit("submit", {
 				notes: this.notes,
 			});
-
+			
 			if (this.resetAfterSubmit) {
 				this.reset();
+			}
+
+			if(this.toggele==true){
+				this.toggele = false;
+				
+			}else{
+				this.toggele=true;
+				
 			}
 		},
 		reset() {
 			this.notes = "";
 		},
+		
 	},
 };
 </script>

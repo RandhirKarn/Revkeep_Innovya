@@ -55,7 +55,6 @@
 							/>
 						</b-form-group>
 					</validation-provider>
-
 					<validation-provider
 						vid="third_party_contractor"
 						name="Third Party Contractor"
