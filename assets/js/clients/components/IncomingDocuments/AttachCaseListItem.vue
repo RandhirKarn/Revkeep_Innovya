@@ -178,7 +178,7 @@
 			</div> -->
 			<div v-if="hasAppeals">
 				<b-card no-body>
-					<b-card-header>Appeals123</b-card-header>
+					<b-card-header>Appeals</b-card-header>
 					<b-list-group flush>
 						<b-list-group-item v-for="appeal , i in appeals" :key="appeal.id" class="shadow-sm">
 							<b-row>

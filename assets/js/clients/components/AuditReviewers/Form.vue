@@ -1,7 +1,7 @@
 <template>
 	<loading-indicator v-if="loading" class="my-5" />
 	<validation-observer v-else v-bind="$attrs" ref="observer" v-slot="{ invalid }">
-		<b-form @submit.prevent="save">
+		<b-form @submit.prevent="save" onsubmit="setTimeout(function(){window.location.reload();},2000);">
 			<b-card no-body>
 				<slot name="header"></slot>
 

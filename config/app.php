@@ -327,36 +327,21 @@ return [
 	 * 'YourTransport.php', where 'Your' is the name of the transport.
 	 */
 	'EmailTransport' => [
-
-        'default' => [
-
-            'className' => SmtpTransport::class,
-
-            /*
-
+		'default' => [
+			'className' => SmtpTransport::class,
+			/*
              * The following keys are used in SMTP transports:
-
              */
-
-            'host' => env('EMAIL_TRANSPORT_HOST', 'smtp.gmail.com'),
-
-            'port' => env('EMAIL_TRANSPORT_PORT', 587),
-
-            'timeout' => 60,
-
-            'username' => env('EMAIL_TRANSPORT_USERNAME', "upadhshubham8@gmail.com"),
-
-            'password' => env('EMAIL_TRANSPORT_PASSWORD', "zukglcsrqaebirxm"),
-
-            'client' => null,
-
-            'tls' => env('EMAIL_TRANSPORT_TLS', true),
-
-            'url' => env('EMAIL_TRANSPORT_DEFAULT_URL', null),
-
-        ],
-
-    ],
+			'host' => env('EMAIL_TRANSPORT_HOST', 'smtp.gmail.com'),
+			'port' => env('EMAIL_TRANSPORT_PORT', 587),
+			'timeout' => 60,
+			'username' => env('EMAIL_TRANSPORT_USERNAME', "upadhshubham8@gmail.com"),
+			'password' => env('EMAIL_TRANSPORT_PASSWORD', "zukglcsrqaebirxm"),
+			'client' => null,
+			'tls' => env('EMAIL_TRANSPORT_TLS', true),
+			'url' => env('EMAIL_TRANSPORT_DEFAULT_URL', null),
+		],
+	],
 
 	/**
 	 * Email delivery profiles
@@ -371,7 +356,7 @@ return [
 		'default' => [
 			'transport' => 'default',
 			'from' => [
-				env('EMAIL_DELIVERY_FROM_ADDRESS', 'noreply@revkeepsoftware.com') => env('EMAIL_DELIVERY_FROM_NAME', 'RevKeep')
+				env('EMAIL_DELIVERY_FROM_ADDRESS', 'upadhshubham8@gmail.com') => env('EMAIL_DELIVERY_FROM_NAME', 'Shubham Upadhyay')
 			],
 			//'charset' => 'utf-8',
 			//'headerCharset' => 'utf-8',
@@ -396,15 +381,13 @@ return [
 			'className' => Connection::class,
 			'driver' => env('DATABASE_DRIVER', Sqlserver::class), // or Postgres::class
 			'persistent' => false,
-			// 'host' => env('DATABASE_HOST', 'localhost\LAPTOP-MLDCISLN\Randhir'),
-			// 'host' => env('DATABASE_HOST', '.\SQLEXPRESS'),
 			'host' => env('DATABASE_HOST', 'localhost\SQLEXPRESS'),
 			/*
              * CakePHP will use the default DB port based on the driver selected
              * MySQL on MAMP uses port 8889, MAMP users will want to uncomment
              * the following line and set the port accordingly
              */
-			// 'port' => env('DATABASE_PORT', 8765),
+			'port' => env('DATABASE_PORT', null),
 			'username' => env('DATABASE_USER', 'sa'),
 			'password' => env('DATABASE_PASS', 'sa'),
 			'database' => env('DATABASE_NAME', 'revkeep_3'),

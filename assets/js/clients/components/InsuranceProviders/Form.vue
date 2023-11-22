@@ -1,7 +1,7 @@
 <template>
 	<loading-indicator v-if="loading" class="my-5" />
 	<validation-observer v-else v-bind="$attrs" ref="observer" v-slot="{ invalid }">
-		<b-form @submit.prevent="save">
+		<b-form @submit.prevent="save" onsubmit="setTimeout(function(){window.location.reload();},2000);">
 			<b-card no-body>
 				<slot name="header"></slot>
 				<b-card-body>
@@ -76,7 +76,7 @@
 								</b-form-group>
 
 					 <div class="d-flex align-items-start">
-    <validation-provider vid="default_insurance_type_id" name="Type" :rules="{ required: true }" v-slot="validationContext">
+    <validation-provider vid="default_insurance_type_id" name="Type" :rules="{ required: false }" v-slot="validationContext">
       <b-form-group label="Audit Type(s)" label-for="default_insurance_type_id" label-cols-lg="4" label-cols-xl="4">
         <b-form-checkbox-group
           name="insurance_type_ids"
@@ -344,14 +344,23 @@
 														label-cols-lg="4"
 														description="Select the decision type"
 													>
-													<b-form-radio-group
+													<b-form-select
 														name="decision_options"
 														v-model="appealLevel._joinData.decision_options"
 														:options="decisionTypeOptions"
 														:disabled="saving"
 														:state="getValidationState(validationContext)"
 														required="required"
-													/>
+														/>
+													<!-- <b-form-radio-group
+														name="decision_options"
+														v-model="appealLevel._joinData.decision_options"
+														:options="decisionTypeOptions"
+														:disabled="saving"
+														:state="getValidationState(validationContext)"
+														required="required"
+													
+													/> -->
 														<b-form-invalid-feedback
 															v-for="error in validationContext.errors"
 															:key="error"
@@ -880,13 +889,14 @@ export default {
 			this.loading = false;
 		}
 	this.additionalData();
-		this.test();
+		// this.test();
 	
 	},
 	methods: {
 		test(){
 			console.log("ID =",this.entity.id);
 			console.log("ID Direct", this.id);
+			console.log("Entityed =", this.entity);
 		},
 
 	async additionalData(){
@@ -1009,6 +1019,7 @@ export default {
 				this.saving = false;
 				this.$store.dispatch("insuranceProviders/getActive");
 				this.$store.dispatch("insuranceProviders/getAll");
+				this.test();
 			}
 		},
 		addAppealLevel() {
