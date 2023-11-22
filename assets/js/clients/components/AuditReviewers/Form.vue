@@ -1,9 +1,10 @@
 <template>
 	<loading-indicator v-if="loading" class="my-5" />
 	<validation-observer v-else v-bind="$attrs" ref="observer" v-slot="{ invalid }">
-		<b-form @submit.prevent="save">
+		<b-form @submit.prevent="save" onsubmit="setTimeout(function(){window.location.reload();},2000);">
 			<b-card no-body>
 				<slot name="header"></slot>
+
 				<b-card-body>
 					<validation-provider
 						vid="first_name"
@@ -29,6 +30,7 @@
 							/>
 						</b-form-group>
 					</validation-provider>
+
 					<validation-provider
 						vid="middle_name"
 						name="Middle Name"
@@ -74,90 +76,7 @@
 							/>
 						</b-form-group>
 					</validation-provider>
-					<validation-provider
-					vid="professional_degree"
-					name="Professional Degree"
-					:rules="{ required: false }"
-					v-slot="validationContext"
-				>
-					<b-form-group
-						label="Profession Type"
-						label-for="professional_degree"
-						label-cols-lg="4"
-					>
-				<b-input-group>
-					<b-form-select
-						name="professional_degree"
-						v-model="entity.professional_degree"
-						:state="getValidationState(validationContext)"
-						:disabled="saving"
-					>
-					<b-form-select-option v-for="option in professionTypeOptions" :key="option" :value="option">
-        {{ option }}
-    </b-form-select-option>
-					</b-form-select>
-					<template #append>
-						<b-button
-							variant="primary"
-							@click="addingProfessionalDegree = true"
-						>
-							<font-awesome-icon icon="plus" fixed-width />
-						</b-button>
-					</template>
-				</b-input-group>
-						<b-form-invalid-feedback
-							v-for="error in validationContext.errors"
-							:key="error"
-							v-text="error"
-						/>
-						<div v-if="addingProfessionalDegree" class="mb-4">
-    <b-form @submit.prevent="saveProfessionalDegree">
-        <b-card no-body>
-            <b-card-body>
-                <validation-provider
-                    vid="new_professional_degree"
-                    name="New Professional Degree"
-                    :rules="{ required: true, min: 1, max: 50 }"
-                    v-slot="validationContext"
-                >
-                    <b-form-group label="New Profession Type" label-for="new_professional_degree" label-cols-lg="4">
-                        <b-form-input
-						    id="new_professional_degree"
-                            name="new_professional_degree"
-                            type="text"
-                            v-model="new_professional_degree"
-                            required="required"
-                            placeholder="Enter New Profession Type"
-                            :state="getValidationState(validationContext)"
-                            :disabled="saving"
-                        />
-                        <b-form-invalid-feedback
-                            v-for="error in validationContext.errors"
-                            :key="error"
-                            v-text="error"
-                        />
-                    </b-form-group>
-                </validation-provider>
-            </b-card-body>
 
-            <b-card-footer>
-                <b-row>
-                    <b-col cols="12" md="6" lg="4" class="mb-4 mb-md-0">
-                        <b-button block variant="light" @click="cancelAddProfessionalDegree">Cancel</b-button>
-                    </b-col>
-                    <b-col cols="12" md="6" offset-lg="4" lg="4" class="mb-2 mb-md-0">
-                        <b-button block variant="primary" type="submit" :disabled="saving">
-                            <font-awesome-icon icon="circle-notch" v-if="saving" spin fixed-width />
-                            <span>Save</span>
-                        </b-button>
-                    </b-col>
-                </b-row>
-            </b-card-footer>
-        </b-card>
-    </b-form>
-</div>
-					</b-form-group>
-				</validation-provider>
 					<div v-if="addingAgency" class="mb-4">
 						<agency-form @cancel="addingAgency = false" @saved="addedNewAgency">
 							<template #header>
@@ -212,7 +131,7 @@
 									v-text="error"
 								/>
 							</b-form-group>
-						</validation-provider> 
+						</validation-provider>
 					</div>
 
 					<validation-provider
@@ -243,7 +162,67 @@
 					<h6 class="text-muted">Optional</h6>
 					<b-card no-body>
 						<b-card-header header-tag="header" role="tab" class="p-0">
+							<b-button
+								block
+								v-b-toggle.collapseAdditional
+								variant="light"
+								role="tab"
+								class="text-left px-4 py-3 m-0"
+								>Additional</b-button
+							>
 						</b-card-header>
+						<b-collapse id="collapseAdditional" role="tabpanel">
+							<b-card-body>
+								<validation-provider
+									vid="title"
+									name="Title"
+									:rules="{ required: false, min: 1, max: 50 }"
+									v-slot="validationContext"
+								>
+									<b-form-group label="Title" label-for="title" label-cols-lg="4">
+										<b-form-input
+											name="title"
+											type="text"
+											v-model="entity.title"
+											:state="getValidationState(validationContext)"
+											:disabled="saving"
+										/>
+										<b-form-invalid-feedback
+											v-for="error in validationContext.errors"
+											:key="error"
+											v-text="error"
+										/>
+									</b-form-group>
+								</validation-provider>
+
+								<validation-provider
+									vid="professional_degree"
+									name="Professional Degree"
+									:rules="{ required: false, min: 1, max: 50 }"
+									v-slot="validationContext"
+								>
+									<b-form-group
+										label="Professional Degree"
+										label-for="professional_degree"
+										label-cols-lg="4"
+									>
+										<b-form-input
+											name="professional_degree"
+											type="text"
+											v-model="entity.professional_degree"
+											:state="getValidationState(validationContext)"
+											:disabled="saving"
+										/>
+										<b-form-invalid-feedback
+											v-for="error in validationContext.errors"
+											:key="error"
+											v-text="error"
+										/>
+									</b-form-group>
+								</validation-provider>
+							</b-card-body>
+						</b-collapse>
+
 						<b-card-header header-tag="header" role="tab" class="p-0">
 							<b-button
 								block
@@ -364,7 +343,6 @@
 import { mapGetters } from "vuex";
 import { formatErrors, getValidationState } from "@/validation";
 import AgencyForm from "@/clients/components/Agencies/Form.vue";
-import axios from 'axios';
 
 export default {
 	name: "AuditReviewerForm",
@@ -394,13 +372,10 @@ export default {
 				active: true,
 			},
 			addingAgency: false,
-			addingProfessionalDegree: false,
-			professionTypeOptions: [],
-			new_professional_degree: "",
 		};
 	},
 	computed: mapGetters({
-		agencies: "agencies/active",	
+		agencies: "agencies/active",
 	}),
 	mounted() {
 		if (this.id) {
@@ -408,7 +383,6 @@ export default {
 		} else {
 			this.loading = false;
 		}
-		this.fetchProfessionTypes();
 	},
 	methods: {
 		getValidationState,
@@ -419,53 +393,6 @@ export default {
 
 			this.$emit("cancel");
 		},
-		async fetchProfessionTypes() {
-			console.log("started");
-    try {
-      const response = await axios.get('/client/getprofessiontype'); 
-      this.professionTypeOptions = response.data.data;
-    } catch (error) {
-      console.error('Error fetching profession types:', error);
-    }
-  },
-async saveProfessionalDegree() {
-
-console.log("started");
-const newType = this.new_professional_degree;
-// const insid = this.id;
-console.log(newType);
-// Check if the new type is not empty
-if (newType.trim() === '') {
-	return;
-}
-console.log("outside");
-// Send a POST request to your controller to add the new type
-axios.post('/client/professiontype',{newType})
-	.then((response) => {
-		
-		// Handle the response, e.g., update the insuranceTypes list
-		this.professionTypeOptions.push(response.data);
-
-		 // Hide the add new section
-         this.addingProfessionalDegree = false;
-
-		// Clear the input field
-		this.new_professional_degree = '';
-		console.log("new type", newType);
-		console.log("check", response);
-
-		window.location.reload();
-	})
-	.catch((error) => {
-		// Handle any errors, e.g., show an error message
-		console.error('Error adding new type:', error);
-	});
-},
-	cancelAddProfessionalDegree() {
-        // Cancel the add new operation and hide the add new section
-        this.addingProfessionalDegree = false;
-    },
-
 		async refresh() {
 			try {
 				this.loading = true;
