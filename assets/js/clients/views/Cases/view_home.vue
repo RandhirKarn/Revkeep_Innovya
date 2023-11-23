@@ -6,7 +6,7 @@
 					<span v-if="showDetails">Hide Details</span>
 					<span v-else>Show Details</span>
 				</b-button>
-				<b-button @click="showLoveMessage = !showLoveMessage" variant="secondary">
+				<b-button @click="showData" variant="secondary">
 					<span v-if="showLoveMessage">Hide Data</span>
 					<span v-else>Show Data</span>
 				</b-button>
@@ -45,7 +45,7 @@
 					    </b-row>
 					    <b-row class="content-margin">
 						    <b-col cols="6.5" >First Name  &nbsp;  &nbsp;</b-col> 
-						    <b-col cols="5.5" ><p class="value-box">SANDY</p></b-col>
+						    <b-col cols="5.5" ><p class="value-box">{{ response !== null ? response.NM1_PatientName.ResponseContactFirstName_04 : ' ' }}</p></b-col>
 					    </b-row>
 					    <b-row class="content-margin">
 						    <b-col cols="6.5" >Middle Name  &nbsp;  &nbsp;</b-col> 
@@ -53,7 +53,7 @@
 					    </b-row>
 					    <b-row class="content-margin">
 						    <b-col cols="6.5" >Last Name  &nbsp;  &nbsp;</b-col> 
-						    <b-col cols="5.5" ><p class="value-box">DOE</p></b-col>
+						    <b-col cols="5.5" ><p class="value-box">{{ response !== null ? response.NM1_PatientName.ResponseContactLastorOrganizationName_03 : ' '}}</p></b-col>
 					    </b-row>
 					    <b-row class="content-margin">
 						    <b-col cols="6.5" >Contact Number  &nbsp;  &nbsp;</b-col> 
@@ -644,6 +644,7 @@ import CaseAssign from "@/clients/components/Cases/Assign.vue";
 import CaseStatusLabel from "@/clients/components/Cases/StatusLabel.vue";
 import CaseFiles from "@/clients/components/Cases/Files.vue";
 import CaseRequestForm from "@/clients/components/CaseRequests/Form.vue";
+import axios from "axios";
 
 export default {
 	name: "ViewCasesViewHome",
@@ -721,7 +722,8 @@ export default {
 				{ ProcDate: '03/24/2019', ProcCode: '55672', Billed: '$60.00' , Allowed: '$34.00' , Deduct: '$0.00' , Co_Ins: '$0.00' , Co_Pay: '$0.00' , AdjCode: 'CO-45' , Adjustment: '$26.00' , ProvPaid: '$34.00' },
 				{ ProcDate: '03/24/2019', ProcCode: '55673', Billed: '$73.00' , Allowed: '$49.00' , Deduct: '$0.00' , Co_Ins: '$0.00' , Co_Pay: '$0.00' , AdjCode: 'CO-45' , Adjustment: '$24.00' , ProvPaid: '$49.00' },
 				{ ProcDate: 'Totals', ProcCode: '', Billed: '$226.00' , Allowed: '$132.00' , Deduct: '$0.00' , Co_Ins: '$0.00' , Co_Pay: '$0.00' , AdjCode: '' , Adjustment: '$94.00' , ProvPaid: '$132.00' },
-			]
+			],
+			response:null,
 		};
 	},
 	methods: {
@@ -747,6 +749,17 @@ export default {
 
 			this.$emit("added-request", request);
 		},
+		async showData(){
+			console.log('Button Clicked');
+			console.log('case deta2 =', this.caseEntity.patient.full_name);
+			this.showLoveMessage = !this.showLoveMessage;
+			const patientDetails = {
+                   data:this.caseEntity.patient.full_name
+                };
+			const response = await axios.post('/client/patientParsedInfo', patientDetails);
+            console.log("Response1 =", response.data);
+			this.response = response.data;
+		}
 	},
 };
 </script>
