@@ -18,8 +18,13 @@
 		</b-row>
 		<div>
 			<b-collapse v-model="showLoveMessage">
-			  <b-container fluid class="bv-example-row">
-				<!-- table for service claim information -->
+				<template>
+					<div >
+						<pre>{{ formattedData }}</pre>
+					</div>
+				</template>
+			  <!-- <b-container fluid class="bv-example-row">
+				
 				<template>
 					<div >
 						<b-table responsive striped hover :items="items"></b-table>
@@ -29,7 +34,7 @@
 			    <b-row>
 				<b-col>
 				  <div class="info-box">
-					<!-- patient information -->
+					
 					<b-row style="margin-bottom: 20px;padding-right: 50px;">
 							<b-col cols="12">
 								<div>
@@ -116,7 +121,7 @@
 						<b-col cols="6.5" >ZIP &nbsp;  &nbsp;</b-col> 
 						<b-col cols="5.5" ><p class="value-box">11114</p></b-col>
 					</b-row>
-					<!-- PER_PayerTechnicalContactInformation -->
+					
 					<b-row style="margin-bottom: 20px;padding-right: 50px;">
 						<b-col cols="12">
 							<div>
@@ -142,11 +147,11 @@
 				</div>
 					
 				</b-col>
-				<!-- Second column for 835 data -->
+				
 
 				<b-col>
 				  <div class="info-box">
-					<!-- N1_PayeeIdentification -->
+					
 					<b-row style="margin-bottom: 20px;padding-right: 50px;">
 						<b-col cols="12">
 							<div>
@@ -169,7 +174,7 @@
 						<b-col cols="5.5" ><p class="value-box">3UR334563</p></b-col>
 					</b-row>
 					
-					<!-- payee address line -->
+					
 					<b-row style="margin-bottom: 20px;padding-right: 50px;">
 						<b-col cols="12">
 							<div>
@@ -201,7 +206,7 @@
 						<b-col cols="5.5" ><p class="value-box">(123)-456-7890</p></b-col>
 					</b-row>
 
-					<!-- service claim information -->
+					
 					<b-row style="margin-bottom: 20px;padding-right: 50px;">
 						<b-col cols="12">
 							<div>
@@ -244,13 +249,13 @@
 					    </b-row>
 					    <b-row class="content-margin">
 						    <b-col cols="6.5" >837P Secondary DX&nbsp;  &nbsp;</b-col> 
-						    <!-- <b-col cols="5.5" ><p class="value-box">&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</p></b-col> -->
+						    
 					    </b-row>
 
 				</div>
 				</b-col>
 
-				<!-- Third column for 835 data -->
+				
 				<b-col>
 					<div class="info-box">
 					<b-row style="margin-bottom: 20px;padding-right: 50px;">
@@ -295,7 +300,7 @@
 						    <b-col cols="6.5" >Payment Method  &nbsp;  &nbsp;</b-col> 
 						    <b-col cols="5.5" ><p class="value-box">Check</p></b-col>
 					    </b-row>
-						<!-- TRN_ReassociationTraceNumber -->
+						
 						<b-row style="margin-bottom: 20px;padding-right: 50px;">
 							<b-col cols="12">
 								<div>
@@ -335,7 +340,7 @@
 
 
 				</b-row>
-			  </b-container>
+			  </b-container> -->
 			</b-collapse>
 		    </div>
 		    
@@ -710,6 +715,10 @@ export default {
 		hasReadmissions() {
 			return this.caseEntity.case_readmissions && this.caseEntity.case_readmissions.length > 0;
 		},
+		formattedData() {
+      // Use JSON.stringify to format the JSON data for display
+      return JSON.stringify(this.response, null, 2); // null and 2 for spacing and indentation
+    }
 	},
 	data() {
 		return {
@@ -751,14 +760,31 @@ export default {
 		},
 		async showData(){
 			console.log('Button Clicked');
-			console.log('case deta2 =', this.caseEntity.patient.full_name);
+			console.log('case deta2 =', this.caseEntity);
+			console.log('case deta3 =', this.caseEntity.patient.full_name);
 			this.showLoveMessage = !this.showLoveMessage;
 			const patientDetails = {
-                   data:this.caseEntity.patient.full_name
+                   fullName:this.caseEntity.patient.full_name,
+				   firstName:this.caseEntity.patient.first_name,
+				   middleName:this.caseEntity.patient.middle_name,
+				   lastName:this.caseEntity.patient.last_name,
+				   admitDate:this.caseEntity.admit_date
                 };
-			const response = await axios.post('/client/patientParsedInfo', patientDetails);
-            console.log("Response1 =", response.data);
-			this.response = response.data;
+
+			try{
+				const response = await axios.post('/client/patientParsedInfo', patientDetails);
+				console.log("Response1 =", response.data);
+				console.log("check = ",response.data.Loop2110);
+				if(response.data.Loop2110==undefined){
+					this.response = "DATA NOT AVAILABLE FOR THIS CASE";
+				}
+				else{
+					this.response = response.data;
+				}
+			}
+			catch(error){
+				this.response = "DATA NOT AVAILABLE FOR THIS CASE";
+			}
 		}
 	},
 };

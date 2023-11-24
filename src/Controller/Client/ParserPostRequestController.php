@@ -32,19 +32,23 @@ class ParserPostRequestController extends AppController
                 'content' => file_get_contents($file_path),
             ],
         ];
-        $context = stream_context_create($headers);
-        $response = file_get_contents($url, false, $context);
+        // $context = stream_context_create($headers);
+        // $response = file_get_contents($url, false, $context);
+        $response = true;
  
         if ($response === FALSE) {
             echo 'Error reading the file or making the request';
         } else {
-            $json_data = json_decode($response, true);
+            // $json_data = json_decode($response, true);
            
-            $output_file_path = "../storage/$originalNameBase.json";
+            // $output_file_path = "../storage/$originalNameBase.json";
  
-            file_put_contents($output_file_path, json_encode($json_data, JSON_PRETTY_PRINT));
+            // file_put_contents($output_file_path, json_encode($json_data, JSON_PRETTY_PRINT));
  
-            echo json_encode($json_data, JSON_PRETTY_PRINT);
+            // echo json_encode($json_data, JSON_PRETTY_PRINT);
+            $fileContents = file_get_contents('../storage/835_1700465736_sample.json'); // Read the JSON file
+            $json_data = json_decode($fileContents, true); // Decode JSON data into PHP array
+
             $iteration = 1; // Initialize iteration counter
               // echo json_encode($json_data, JSON_PRETTY_PRINT);
                  foreach ($json_data[0]['Groups'][0]['Transactions'][0]['Loop2000'][0]['Loop2100'] as $item) {
@@ -59,7 +63,8 @@ class ParserPostRequestController extends AppController
                     //$pdf_file_name = "$iteration.pdf";
                     //$pdf_file_path = "../storage/"; // Define PDF file path
                     // $pdf->Output('test.pdf', 'F'); // Save PDF to the specified file path
-                    $fileName=$item['AllN1'].$iteration;
+                    $fileName=$item['Loop2110'][0]['DTM_ServiceDate'][0]['Date_02'].$item['AllNM1']['NM1_PatientName']['ResponseContactFirstName_04'].$item['AllNM1']['NM1_PatientName']['ResponseContactMiddleName_05'].$item['AllNM1']['NM1_PatientName']['ResponseContactLastorOrganizationName_03'];
+                    // $fileName=$item['Loop2110'][0]['DTM_ServiceDate'][0]['Date_02'].$iteration;
                     $output_file_path = "../storage/$fileName.json";
  
                     file_put_contents($output_file_path, json_encode($item, JSON_PRETTY_PRINT));
