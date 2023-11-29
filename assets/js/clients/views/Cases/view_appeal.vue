@@ -263,22 +263,12 @@
 			<b-col  md="12" lg="6" class="mt-2 col" >
 				<b-card  no-body>
 				    <div >
-					
 						<nav class="d-flex justify-content-between align-item-center p-2 " style="background-color:#eeeeee;">
-							
-                        
 							<p class=" font-weight-bold h5 ml-4 align-item-center text-center" >Notes</p>
-						
-							
-								
-								<b-button @click="notesToggele();" class="bg-primary mr-3 ">
-									 
+								<b-button @click="notesToggele();" class="bg-primary mr-3 "> 
 									 <font-awesome-icon icon="plus" fixed-width />
-		
 								</b-button>
 						</nav>
-					  
-						 
                                 <add-note-form ref="addNoteForm" @submit="addNote" :saving="addingNote" v-if="toggele" class="m-4"/>
 								<div v-if="hasNotes"  style="max-height: 20rem" class="m-4  overflow-y-auto">
 									<transition-group name="fade">
@@ -299,9 +289,7 @@
 										</div>
 									</transition-group>
 								</div>
-					</div>
-							
-								
+					</div>		
 				</b-card>
 			</b-col>
 		</b-row>
