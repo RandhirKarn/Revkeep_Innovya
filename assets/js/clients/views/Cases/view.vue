@@ -194,46 +194,91 @@
 						<b-badge v-if="caseEntity.unable_to_complete" pill variant="warning" title="Unable To Complete">
 							<font-awesome-icon icon="exclamation-triangle" class="mx-0 px-0" />
 						</b-badge>
-						<span >Case</span>
-					</b-nav-item>
-
-					<b-nav-item
-						v-for="caseRequest in caseEntity.case_requests"
-						:key="'request_' + caseRequest.id"
-						:to="{
-							name: 'caseRequests.view',
-							params: { id: caseEntity.id, case_request_id: caseRequest.id },
-						}"
-						:title="caseRequest.name ? caseRequest.name : '(Missing Name)'"
-						active-class="active font-weight-bold"
-					>
-						<case-request-status-label icon :value="caseRequest" class="d-none d-lg-inline mr-2" />
-						<span v-if="!caseRequest.type_label">Request</span>
-						<span v-else>{{ caseRequest.type_label }}</span>
-					</b-nav-item>
-
-					<b-nav-item
-						v-for="appeal in caseEntity.appeals"
-						:key="'appeal_' + appeal.id"
-						:to="{ name: 'appeals.view', params: { id: caseEntity.id, appeal_id: appeal.id } }"
-						:title="
-							appeal.appeal_level && appeal.appeal_level.short_name
-								? appeal.appeal_level.short_name
-								: '(Missing Level)'
-						"
-						active-class="active font-weight-bold"
-					>
-						<appeal-status-label icon :value="appeal" class="d-none d-lg-inline mr-2" />
-						<!-- <span
-							v-if="appeal.appeal_level && appeal.appeal_level.short_name"
-							v-text="checkAppealName(appeal)"
-						/>
-						<span v-else class="text-danger">(Missing Level)test1</span> -->
-						<span
-							v-text="checkAppealName(caseEntity , appeal)"
-						/>
+						<span>
+								Case
+							</span>
+						</b-nav-item>
+						<b-nav-item 
+							title="Click to show Appeals"
+							active-class="active font-weight-bold"
+							class="border-right border-top"
+							style="background-color: white;"
+						>
+							<span @click="toggleCollapse">
+								<font-awesome-icon v-if="isCollapsed" icon="chevron-up" fixed-width />
+								<font-awesome-icon v-else icon="chevron-down" fixed-width />
+							</span>
 					</b-nav-item>
 				</b-nav>
+
+				<!-- adding case related requests to case tab -->
+				<b-collapse v-model="isCollapsed" class="mt-3" style="margin-left: -2vmin !important;">
+					<div class="card card-body">
+						<b-nav card-header tabs>
+							<!-- <b-nav-item
+									v-for="caseRequest in caseEntity.case_requests"
+									:key="'request_' + caseRequest.id"
+									:to="{
+										name: 'caseRequests.view',
+										params: { id: caseEntity.id, case_request_id: caseRequest.id },
+									}"
+									:title="caseRequest.name ? caseRequest.name : '(Missing Name)'"
+									active-class="active font-weight-bold"
+								>
+									<case-request-status-label icon :value="caseRequest" class="d-none d-lg-inline mr-2" />
+									<span v-if="!caseRequest.type_label">Request</span>
+									<span v-else>{{ caseRequest.type_label }}</span>
+							</b-nav-item> -->
+							<!-- adding case related appeals to case tab -->
+							<b-nav-item 
+								v-for="(appeal, index) in caseEntity.appeals"
+								:key="'appeal_' + appeal.id"
+								:to="{ name: 'appeals.view', params: { id: caseEntity.id, appeal_id: appeal.id } }"
+								:title="
+									appeal.insurance_appeal_id && appeal.appeal_type_id
+										? 'Level {{ index+1 }} '
+										: '(Missing Level)'		
+								"
+								active-class="active font-weight-bold"
+								class="mb-2"
+							>
+								<appeal-status-label icon :value="appeal" class="d-none d-lg-inline mr-2" />
+								<span  v-if="appeal.insurance_appeal_id && appeal.appeal_type_id">Level {{ index+1 }}</span>
+									
+								<span v-else class="text-danger" style="vertical-align: middle;">'(Missing Level)'</span>
+								<!-- collapsible trigger button to show requests for parent appeal -->
+								<span v-b-toggle="'collapse-' + index" variant="primary" style="border-left: 2px solid #b2b1b1;" @click="toggleIcon">
+									<font-awesome-icon  v-if="isUpIconVisible" icon="chevron-up" fixed-width class="ml-2" />
+									<font-awesome-icon v-else icon="chevron-down" fixed-width class="ml-2" />
+								</span>
+
+								<b-nav card-header tabs>
+									<b-collapse v-bind:id="'collapse-' + index" accordion="my-accordion" role="tabpanel" >
+										<!-- Content of the collapsible section -->
+										<b-nav-item
+											v-for="(caseRequest, reqIndex) in caseEntity.case_requests" 
+											v-if="index === caseRequest.appeal_level" 
+											:key="'request_' + caseRequest.id"
+											:to="{
+												name: 'caseRequests.view',
+												params: { id: caseEntity.id, case_request_id: caseRequest.id },
+											}"
+											:title="caseRequest.name ? caseRequest.name : '(Missing Name)'"
+											active-class="active font-weight-bold"
+											style="margin-top: 5px;margin-bottom:3px;border-bottom: 2px solid #ebebeb;"
+										>
+											<case-request-status-label icon :value="caseRequest" class="d-none d-lg-inline mr-2" />
+											<span v-if="!caseRequest.type_label">Request</span>
+											<span v-else>{{ caseRequest.type_label }}</span>
+										</b-nav-item>
+									</b-collapse>
+								</b-nav>
+								
+							</b-nav-item>
+						</b-nav>
+					</div>
+				</b-collapse>
+
 			</b-card-header>
 
 			<router-view
@@ -263,6 +308,8 @@
 </template>
 
 <script type="text/javascript">
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import AppealStatusLabel from "@/clients/components/Appeals/StatusLabel.vue";
 import CaseActivity from "@/clients/components/Cases/Activity.vue";
 import CloseCaseModal from "@/clients/components/Cases/CloseCaseModal.vue";
@@ -281,6 +328,8 @@ export default {
 	},
 	data() {
 		return {
+			isCollapsed: false,
+			isUpIconVisible: false,
 			loading: true,
 			reopening: false,
 			error: false,
@@ -489,6 +538,12 @@ export default {
 		},
 		deletedRequest(request) {
 			this.refresh();
+		},
+		toggleCollapse() {
+			this.isCollapsed = !this.isCollapsed;
+		},
+		toggleIcon() {
+			this.isUpIconVisible = !this.isUpIconVisible;
 		},
 		async test(){
 			const url = "/client/insuranceappeal";
